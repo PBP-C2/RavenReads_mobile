@@ -22,6 +22,10 @@ Link GitHub : https://github.com/PBP-C2</summary>
 </details>
 
 <details>
+<summary> Berita Acara </summary>
+</details>
+
+<details>
 <summary> Penjelasan Aplikasi </summary>
 
 RavenReads adalah aplikasi peminjaman buku yang menyediakan berbagai jenis buku untuk dibaca dan dipinjam pengguna. Setiap pengguna RavenReads harus memiliki akun untuk mengakses fitur-fitur dari `RavenReads`. Apabila pengguna belum memiliki akun, pengguna dapat mendaftar akun baru untuk menggunakan aplikasi `RavenReads`. RavenReads menyediakan beberapa fitur. `Discussion Forum`, untuk memberikan wadah interaktif bagi pengguna untuk berbagi dan mendiskusikan buku. `SpellBook & Whole Scroll`, memungkinkan pengguna membuat dan membagikan buku mereka sendiri kepada komunitas. Book Reading Progression untuk mencatat progres membaca pengguna, termasuk fitur bookmark, progress bar, catatan, dan sistem review. MagicQuiz adalah modul kuis yang memberikan rekomendasi buku berdasarkan preferensi pengguna. Terakhir, `Book Store`, untuk menyediakan pengalaman berbelanja buku dengan card-card berisi detail buku, rating, dan deskripsi, serta fitur pencarian dan checkout. Keseluruhan, modul-modul ini memberikan pengguna pengalaman berbaca yang kaya dan terintegrasi.
