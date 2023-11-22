@@ -23,6 +23,7 @@ Link GitHub : https://github.com/PBP-C2</summary>
 
 <details>
 <summary> Berita Acara </summary>
+[Berita Acara](https://docs.google.com/spreadsheets/d/15F-hQN4qxcnZSsYZ3SRkwA9IR-BHAAaVXKwcpnxNT00/edit#gid=0)
 </details>
 
 <details>
