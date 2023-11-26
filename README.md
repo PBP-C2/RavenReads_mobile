@@ -1,9 +1,8 @@
 # RAVENREADS
 
-<details>
-<summary> 
-Link GitHub : https://github.com/PBP-C2</summary>
-</details>
+Link GitHub : [PBP-C2](https://github.com/PBP-C2)
+
+Link Web : [Raven Reads](https://ravenreads-c02-tk.pbp.cs.ui.ac.id)
 
 <details>
 <summary> Anggota</summary>
