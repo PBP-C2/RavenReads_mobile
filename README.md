@@ -75,7 +75,6 @@ Pengguna</summary>
 </details>
 
 <details>
-<details>
 <summary> Alur Integrasi dengan Aplikasi Web </summary>
 
 1. Membuat fungsi baru untuk menerima *request* dan mengirimkan respon ke aplikasi mobile.
