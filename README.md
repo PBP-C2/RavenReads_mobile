@@ -4,6 +4,10 @@ Link GitHub : [PBP-C2](https://github.com/PBP-C2)
 
 Link Web : [Raven Reads](https://ravenreads-c02-tk.pbp.cs.ui.ac.id)
 
+Link Web : [Berita Acara](https://docs.google.com/spreadsheets/d/15F-hQN4qxcnZSsYZ3SRkwA9IR-BHAAaVXKwcpnxNT00/edit#gid=0)
+
+Link Aplikasi : TBA
+
 <details>
 <summary> Anggota</summary>
 - 2206082114 - Clement Samuel Marly<br>
@@ -13,18 +17,6 @@ Link Web : [Raven Reads](https://ravenreads-c02-tk.pbp.cs.ui.ac.id)
 - 2206814425 - Rizki Maulana<br>
 </details>
 
-</details>
-
-<details>
-<summary> Tautan APK </summary>
-
-</details>
-
-<details>
-<summary> Berita Acara </summary>
-
-[Berita Acara](https://docs.google.com/spreadsheets/d/15F-hQN4qxcnZSsYZ3SRkwA9IR-BHAAaVXKwcpnxNT00/edit#gid=0)
-</details>
 
 <details>
 <summary> Penjelasan Aplikasi </summary>
