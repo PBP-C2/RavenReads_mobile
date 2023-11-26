@@ -75,13 +75,9 @@ Pengguna</summary>
 </details>
 
 <details>
-<details>
 <summary> Alur Integrasi dengan Aplikasi Web </summary>
 
 1. Membuat fungsi baru untuk menerima *request* dan mengirimkan respon ke aplikasi mobile.
 2. Pada flutter aplikasi mobile, menambahkan *request* ke url fungsi tersebut dan mengolah data yang didapatkan dari hasil *request*
 3. Melakukan debugging dan memperbaiki apabila ada *error* atau hal lainnya sampai aplikasi berjalan dengan baik dan memenuhi ketentuan yang diinginkan.
 </details>
-
-<summary>
-Rough Design</summary>
