@@ -82,6 +82,3 @@ Pengguna</summary>
 2. Pada flutter aplikasi mobile, menambahkan *request* ke url fungsi tersebut dan mengolah data yang didapatkan dari hasil *request*
 3. Melakukan debugging dan memperbaiki apabila ada *error* atau hal lainnya sampai aplikasi berjalan dengan baik dan memenuhi ketentuan yang diinginkan.
 </details>
-
-<summary>
-Rough Design</summary>
