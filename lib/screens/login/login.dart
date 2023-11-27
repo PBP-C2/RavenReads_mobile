@@ -1,8 +1,10 @@
 import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/models/UserProvider.dart';
 import 'package:raven_reads_mobile/screens/register/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:raven_reads_mobile/models/UserProvider.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -33,10 +35,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    final userProvider = Provider.of<UserProvider>(context);
+    
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -73,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
                 final response = await request.login(
-                    "https://clement-samuel-tugas.pbp.cs.ui.ac.id/auth/login/",
+                    "http://127.0.0.1:8000/auth/login/",
                     {
                       'username': username,
                       'password': password,
@@ -83,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   String message = response['message'];
                   String uname = response['username'];
                   int id = response['id'];
+                  userProvider.login(uname, id);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
