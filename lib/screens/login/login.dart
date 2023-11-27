@@ -1,4 +1,5 @@
 import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/screens/register/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,10 @@ class _LoginPageState extends State<LoginPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Login'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -66,23 +70,24 @@ class _LoginPageState extends State<LoginPage> {
                 String password = _passwordController.text;
 
                 // Cek kredensial
-                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL! (untuk sementara di local dulu)
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
-                final response =
-                    await request.login("http://127.0.0.1:8000/auth/login/", {
-                  'username': username,
-                  'password': password,
-                });
+                final response = await request.login(
+                    "https://clement-samuel-tugas.pbp.cs.ui.ac.id/auth/login/",
+                    {
+                      'username': username,
+                      'password': password,
+                    });
 
                 if (request.loggedIn) {
                   String message = response['message'];
                   String uname = response['username'];
+                  int id = response['id'];
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MyHomePage(title: "RavenReads Mobile")),
+                            const MyHomePage(title: 'Raven Reads')),
                   );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
@@ -107,6 +112,23 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               child: const Text('Login'),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Don`t have an account yet?',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to registration page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const RegistrationPage()),
+                );
+              },
+              child: const Text('Register'),
             ),
           ],
         ),
