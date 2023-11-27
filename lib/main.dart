@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/screens/login/login.dart';
 import '../screens/forum_discussion/main_discussion.dart';
-import 'package:provider/provider.dart'; 
+import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
-
-
 
 void main() {
   runApp(const MyApp());
@@ -17,16 +15,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       create: (_) {
-          CookieRequest request = CookieRequest();
-          return request;
+        CookieRequest request = CookieRequest();
+        return request;
       },
       child: MaterialApp(
-        title: 'Flutter App',
-        theme: ThemeData(
+          title: 'Flutter App',
+          theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
             useMaterial3: true,
-        ),
-        home: LoginPage()),
+          ),
+          home: LoginPage()),
     );
   }
 }
