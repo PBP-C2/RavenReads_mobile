@@ -26,8 +26,10 @@ class LeftDrawer extends StatelessWidget {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(10)),
-                Text("Uhhhhhhhhh isinya nanti aja ini mau diisi apaan saya juga gak tau", 
-                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+                Text(
+                    "Uhhhhhhhhh isinya nanti aja ini mau diisi apaan saya juga gak tau",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
@@ -40,7 +42,9 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(title: "RavenReads Mobile",),
+                    builder: (context) => MyHomePage(
+                      title: "RavenReads Mobile",
+                    ),
                   ));
             },
           ),
