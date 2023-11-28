@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:raven_reads_mobile/models/UserProvider.dart';
-import 'package:raven_reads_mobile/widgets/MainDiscussionFormModal.dart';
+import 'package:raven_reads_mobile/widgets/Discussion%20Forum/MainDiscussionFormModal.dart';
+import 'package:raven_reads_mobile/screens/forum_discussion/reply_thread.dart';
 
 
 class MainDiscussion extends StatelessWidget {
@@ -54,17 +55,25 @@ class MainDiscussion extends StatelessWidget {
       return list_product;
   }
 
-  Future<List<Widget>> fetchAndCreateCards() async {
+  Future<List<Widget>> fetchAndCreateCards(BuildContext context) async {
     // Fetch Wizard data
     List<WizardThread> wizardThreads = await fetchWizardThread();
 
     // Create cards for Wizard data
     List<Widget> cards = wizardThreads.map((wizardThread) {
-      return Card(
-        // Customize your card
-        child: ListTile(
-          title: Text(wizardThread.fields.title), // Assuming WizardThread has a 'title' field
-          // Add other card details
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ReplyThreadScreen(id:wizardThread.pk)),
+          );
+        },
+        child: Card(
+          // Customize your card
+          child: ListTile(
+            title: Text(wizardThread.fields.title), // Assuming WizardThread has a 'title' field
+            // Add other card details
+          ),
         ),
       );
     }).toList();
@@ -74,11 +83,19 @@ class MainDiscussion extends StatelessWidget {
 
     // Create cards for Muggle data and add to the existing list
     cards.addAll(muggleThreads.map((muggleThread) {
-      return Card(
-        // Customize your card
-        child: ListTile(
-          title: Text(muggleThread.fields.title), // Assuming MuggleThread has a 'title' field
-          // Add other card details
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ReplyThreadScreen(id:muggleThread.pk)),
+          );
+        },
+        child: Card(
+          // Customize your card
+          child: ListTile(
+            title: Text(muggleThread.fields.title), // Assuming MuggleThread has a 'title' field
+            // Add other card details
+          ),
         ),
       );
     }).toList());
@@ -93,12 +110,13 @@ class MainDiscussion extends StatelessWidget {
     final username = userProvider.user?.username ?? 'Guest';
     final id = userProvider.user?.id ?? 0;
 
-    final cardContent = fetchAndCreateCards();
+    final cardContent = fetchAndCreateCards(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Threads'),
       ),
+      drawer: const LeftDrawer(),
       body: FutureBuilder<List<Widget>>(
         future: cardContent,
         builder: (context, snapshot) {
@@ -129,7 +147,7 @@ class MainDiscussion extends StatelessWidget {
           // Action to be taken when the button is pressed
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MainDiscussionFormScreen()),
+            MaterialPageRoute(builder: (context) => MainDiscussionFormScreen(id: id)),
           );
         },
         child: Icon(Icons.add), // Replace with your icon
