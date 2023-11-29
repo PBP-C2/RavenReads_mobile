@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/main.dart';
 import 'package:raven_reads_mobile/screens/forum_discussion/main_discussion.dart';
+import 'package:raven_reads_mobile/screens/whole_scroll/product_list.dart';
+import 'package:raven_reads_mobile/screens/whole_scroll/shoplist_form.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -53,6 +55,30 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MainDiscussion(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.bookmark_add),
+            title: const Text('SpellBook'),
+            // Bagian redirection ke ShopFormPage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopFormPage(),
+                  ));
+            },
+          ),
+            ListTile(
+            leading: const Icon(Icons.book),
+            title: const Text('WholeScroll'),
+            // Bagian redirection ke ShopFormPage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductListPage(),
                   ));
             },
           ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:raven_reads_mobile/screens/whole_scroll/product_list.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
+
 
 // TODO: Impor drawer yang sudah dibuat sebelumnya
 
@@ -11,9 +14,9 @@ class ShopFormPage extends StatefulWidget {
 
 class _ShopFormPageState extends State<ShopFormPage> {
   final _formKey = GlobalKey<FormState>();  
-  String _name = "";
-  int _price = 0;
-  String _description = "";
+  String _title = "";
+  String _imageurl = "";
+  String _content = "";
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +41,20 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Nama Item",
-                    labelText: "Nama Item",
+                    hintText: "Judul Buku",
+                    labelText: "Judul Buku",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                   onChanged: (String? value) {
                     setState(() {
-                      _name = value!;
+                      _title = value!;
                     });
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Nama tidak boleh kosong!";
+                      return "Judul buku tidak boleh kosong!";
                     }
                     return null;
                   },
@@ -61,8 +64,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Harga",
-                    labelText: "Harga",
+                    hintText: "Image URL",
+                    labelText: "Image URL",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -70,15 +73,13 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   // TODO: Tambahkan variabel yang sesuai
                   onChanged: (String? value) {
                     setState(() {
-                      _price = int.parse(value!);
+                      // TODO: Tambahkan variabel yang sesuai
+                      _imageurl = value!;
                     });
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Harga tidak boleh kosong!";
-                    }
-                    if (int.tryParse(value) == null) {
-                      return "Harga harus berupa angka!";
+                      return "Image URL tidak boleh kosong!";
                     }
                     return null;
                   },
@@ -88,8 +89,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Deskripsi",
-                    labelText: "Deskripsi",
+                    hintText: "Content",
+                    labelText: "Content",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -97,12 +98,12 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   onChanged: (String? value) {
                     setState(() {
                       // TODO: Tambahkan variabel yang sesuai
-                      _description = value!;
+                      _content = value!;
                     });
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Deskripsi tidak boleh kosong!";
+                      return "Content tidak boleh kosong!";
                     }
                     return null;
                   },
@@ -118,39 +119,48 @@ class _ShopFormPageState extends State<ShopFormPage> {
                           MaterialStateProperty.all(Colors.blueAccent),
                       ),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Simpan data produk ke dalam list
-                        // Tampilkan daftar produk yang sudah disimpan di dalam AlertDialog
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Produk berhasil tersimpan'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Nama: $_name'),
-                                    Text('Harga: $_price'),
-                                    Text('Deskripsi: $_description'),
-                                  ],
-                                ),
+                    if (_formKey.currentState!.validate()) {
+                      // Simpan data produk ke dalam list
+                      Product newProduct = Product(_title, _imageurl , _content);
+                      ProductListPage.products.add(newProduct);
+
+                      // Navigate to the ProductListPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProductListPage()),
+                      );
+
+                      // Tampilkan daftar produk yang sudah disimpan di dalam AlertDialog
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Produk berhasil tersimpan'),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Judul: $_title'),
+                                  Text('Content: $_content'),
+                                ],
                               ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        // Reset formulir setelah menyimpan
-                        _formKey.currentState!.reset();
-                      }
-                    },
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      // Reset formulir setelah menyimpan
+                      _formKey.currentState!.reset();
+                    }
+                  },
                     child: const Text(
                       "Save",
                       style: TextStyle(color: Colors.white),
@@ -162,6 +172,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
           )
         ),
       ),
+
+
       drawer: const LeftDrawer(),
     );
   }
