@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:raven_reads_mobile/screens/magic_quiz/quiz_results.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
 
 void main() {
@@ -134,9 +135,12 @@ class _QuizPageState extends State<QuizPage> {
         displayText = current.question;
       });
     } else {
-      setState(() {
-        displayText = "Quiz Completed. Total Points: $totalPoints";
-      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizResultsPage(totalPoints: totalPoints),
+        ),
+      );
     }
   }
 
@@ -154,30 +158,42 @@ class _QuizPageState extends State<QuizPage> {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      drawer: LeftDrawer(),
+      drawer: const LeftDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              displayText,
-              style: TextStyle(fontSize: 20.0),
-              textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                displayText,
+                style: const TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.center,
+              ),
             ),
-            SizedBox(height: 20),
             if (currentQuestion < questions.length)
               Column(
                 children: [
                   ...questions[currentQuestion].options.map((option) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          totalPoints += option["value"] as int;
-                          currentQuestion++;
-                          displayQuestion();
-                        });
-                      },
-                      child: Text(option["option"] as String),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              totalPoints += option["value"] as int;
+                              currentQuestion++;
+                              displayQuestion();
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(16.0),
+                          ),
+                          child: Text(option["option"] as String),
+                        ),
+                      ),
                     );
                   }).toList(),
                 ],
