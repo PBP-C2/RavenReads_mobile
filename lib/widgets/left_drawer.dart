@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/screens/magic_quiz/quiz_page.dart';
 import 'package:raven_reads_mobile/screens/forum_discussion/main_discussion.dart';
 import 'package:raven_reads_mobile/screens/whole_scroll/product_list.dart';
 import 'package:raven_reads_mobile/screens/whole_scroll/shoplist_form.dart';
@@ -28,8 +29,10 @@ class LeftDrawer extends StatelessWidget {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(10)),
-                Text("Uhhhhhhhhh isinya nanti aja ini mau diisi apaan saya juga gak tau", 
-                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+                Text(
+                    "Uhhhhhhhhh isinya nanti aja ini mau diisi apaan saya juga gak tau",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
@@ -42,12 +45,14 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(title: "RavenReads Mobile",),
+                    builder: (context) => MyHomePage(
+                      title: "RavenReads Mobile",
+                    ),
                   ));
             },
           ),
           ListTile(
-            leading: const Icon(Icons.add_shopping_cart),
+            leading: const Icon(Icons.forum_outlined),
             title: const Text('Main Discussion'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
@@ -59,26 +64,38 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.bookmark_add),
-            title: const Text('SpellBook'),
-            // Bagian redirection ke ShopFormPage
+            leading: const Icon(Icons.quiz_outlined),
+            title: const Text('Magic Quiz'),
+            // Bagian redirection ke MyHomePage
             onTap: () {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ShopFormPage(),
+                    builder: (context) => QuizPage(),
                   ));
             },
           ),
-            ListTile(
-            leading: const Icon(Icons.book),
+          ListTile(
+            leading: const Icon(Icons.book_online_outlined),
             title: const Text('WholeScroll'),
-            // Bagian redirection ke ShopFormPage
+            // Bagian redirection ke MyHomePage
             onTap: () {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProductListPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.book_online_rounded),
+            title: const Text('SpellBook'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopFormPage(),
                   ));
             },
           ),
