@@ -76,19 +76,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.book_online_outlined),
-            title: const Text('WholeScroll'),
-            // Bagian redirection ke MyHomePage
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductListPage(),
-                  ));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.book_online_rounded),
+            leading: const Icon(Icons.book),
             title: const Text('SpellBook'),
             // Bagian redirection ke MyHomePage
             onTap: () {
@@ -96,6 +84,18 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ShopFormPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.bookmark_add),
+            title: const Text('WholeScroll'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductListPage(),
                   ));
             },
           ),
