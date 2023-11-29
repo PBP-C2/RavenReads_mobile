@@ -191,7 +191,11 @@ class _QuizPageState extends State<QuizPage> {
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(16.0),
                           ),
-                          child: Text(option["option"] as String),
+                          child: Text(
+                            option["option"] as String,
+                            style: const TextStyle(
+                                fontSize: 18.0), // Change text size here
+                          ),
                         ),
                       ),
                     );
