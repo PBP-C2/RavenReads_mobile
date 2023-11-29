@@ -50,7 +50,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.add_shopping_cart),
+            leading: const Icon(Icons.forum_outlined),
             title: const Text('Main Discussion'),
             // Bagian redirection ke ShopFormPage
             onTap: () {

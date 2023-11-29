@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/widgets/left_drawer.dart';
 
 class QuizResultsPage extends StatelessWidget {
   final int totalPoints;
@@ -9,10 +11,11 @@ class QuizResultsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Results'),
+        title: const Text('Magic Quiz'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
+      drawer: const LeftDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +32,13 @@ class QuizResultsPage extends StatelessWidget {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyHomePage(
+                        title: "RavenReads Mobile",
+                      ),
+                    ));
               },
               child: Text('Back to Quiz'),
             ),
