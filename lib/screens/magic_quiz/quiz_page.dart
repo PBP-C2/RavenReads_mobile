@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/screens/magic_quiz/quiz_results.dart';
+import 'package:raven_reads_mobile/widgets/left_drawer.dart';
 
 void main() {
   runApp(MyQuizApp());
@@ -157,6 +158,7 @@ class _QuizPageState extends State<QuizPage> {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
+      drawer: const LeftDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
