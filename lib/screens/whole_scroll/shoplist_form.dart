@@ -24,59 +24,69 @@ class _ShopFormPageState extends State<ShopFormPage> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Form Tambah Item',
+            'SpellBook',
           ),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor:  Colors.indigo[900],
         foregroundColor: Colors.white,
       ),
-      // TODO: Tambahkan drawer yang sudah dibuat di sini
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Judul Buku",
-                    labelText: "Judul Buku",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+      body: Stack(
+        children: [
+          // Background Container
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white, // Set your desired background color
+            ),
+          ),
+          // Form Content
+          Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Judul Buku",
+                        labelText: "Judul Buku",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _title = value!;
+                        });
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return "Judul buku tidak boleh kosong!";
+                        }
+                        return null;
+                      },
                     ),
                   ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      _title = value!;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "Judul buku tidak boleh kosong!";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Image URL",
-                    labelText: "Image URL",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  // TODO: Tambahkan variabel yang sesuai
-                  onChanged: (String? value) {
-                    setState(() {
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Image URL",
+                        labelText: "Image URL",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                      ),
                       // TODO: Tambahkan variabel yang sesuai
-                      _imageurl = value!;
-                    });
-                  },
+                      onChanged: (String? value) {
+                        setState(() {
+                          // TODO: Tambahkan variabel yang sesuai
+                          _imageurl = value!;
+                        });
+                      },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "Image URL tidak boleh kosong!";
@@ -92,7 +102,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                     hintText: "Content",
                     labelText: "Content",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(40.0),
                     ),
                   ),
                   onChanged: (String? value) {
@@ -114,9 +124,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.blueAccent),
+                      style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 13, 21, 65)),
                       ),
                     onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -135,13 +144,13 @@ class _ShopFormPageState extends State<ShopFormPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Produk berhasil tersimpan'),
+                            title: Text(_title),
                             content: SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Judul: $_title'),
-                                  Text('Content: $_content'),
+                                  Text(_title),
+                                  Text(_content),
                                 ],
                               ),
                             ),
@@ -169,12 +178,12 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 ),
               ),
             ]
-          )
-        ),
+            )
+          ),
+          ),
+        ],
       ),
-
-
-      drawer: const LeftDrawer(),
+    drawer: const LeftDrawer(),
     );
   }
 }
