@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/screens/magic_quiz/quiz_page.dart';
 import 'package:raven_reads_mobile/screens/forum_discussion/main_discussion.dart';
 
 class LeftDrawer extends StatelessWidget {
@@ -57,6 +58,18 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MainDiscussion(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.quiz_outlined),
+            title: const Text('Magic Quiz'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizPage(),
                   ));
             },
           ),
