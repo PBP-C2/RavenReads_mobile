@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/models/Book/book.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
 
 class QuizResultsPage extends StatelessWidget {
   final int totalPoints;
+  const QuizResultsPage({required this.totalPoints});
 
-  QuizResultsPage({required this.totalPoints});
+  Future<List<Book>> fetchProduct() async {
+    var url = Uri.parse('http://127.0.0.1:8000/api/books/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    // melakukan decode response menjadi bentuk json
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    // melakukan konversi data json menjadi object Product
+    List<Book> list_product = [];
+    for (var d in data) {
+      if (d != null && d['fields']['pk'] == 1) {
+        list_product.add(Book.fromJson(d));
+      }
+    }
+    return list_product;
+  }
 
   @override
   Widget build(BuildContext context) {
