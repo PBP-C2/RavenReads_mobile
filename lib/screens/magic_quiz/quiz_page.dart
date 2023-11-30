@@ -138,7 +138,7 @@ class _QuizPageState extends State<QuizPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => QuizResultsPage(totalPoints: totalPoints),
+          builder: (context) => BookRecommendation(totalPoints: totalPoints),
         ),
       );
     }
@@ -192,9 +192,11 @@ class _QuizPageState extends State<QuizPage> {
                             padding: const EdgeInsets.all(16.0),
                           ),
                           child: Text(
+                            textAlign: TextAlign.center,
                             option["option"] as String,
                             style: const TextStyle(
-                                fontSize: 18.0), // Change text size here
+                              fontSize: 18.0,
+                            ),
                           ),
                         ),
                       ),
