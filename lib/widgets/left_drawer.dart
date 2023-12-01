@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/main.dart';
+import 'package:raven_reads_mobile/screens/book_store/book_store.dart';
 import 'package:raven_reads_mobile/screens/magic_quiz/quiz_page.dart';
 import 'package:raven_reads_mobile/screens/forum_discussion/main_discussion.dart';
-
+import 'package:raven_reads_mobile/screens/book_store/book_store.dart';
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
@@ -70,6 +71,18 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => QuizPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.store_outlined),
+            title: const Text('Book Store'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BookStorePage(),
                   ));
             },
           ),
