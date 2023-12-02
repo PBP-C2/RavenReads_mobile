@@ -73,11 +73,11 @@ class _BookRecommendationState extends State<BookRecommendation> {
             );
           } else {
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(
                     'https://picsum.photos/seed/picsum/200/300',
-                  ), // Replace with your image URL
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -102,7 +102,7 @@ class _BookRecommendationState extends State<BookRecommendation> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
+                            SizedBox(
                               height: 200,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -114,7 +114,7 @@ class _BookRecommendationState extends State<BookRecommendation> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Center(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
