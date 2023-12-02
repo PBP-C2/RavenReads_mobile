@@ -1,29 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:raven_reads_mobile/screens/magic_quiz/quiz_results.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
-
-void main() {
-  runApp(MyQuizApp());
-}
+import 'package:http/http.dart' as http;
 
 class Question {
   final String question;
   final List<Map<String, dynamic>> options;
 
   Question({required this.question, required this.options});
-}
-
-class MyQuizApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Magic Quiz',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: QuizPage(),
-    );
-  }
 }
 
 class QuizPage extends StatefulWidget {
@@ -35,6 +23,7 @@ class _QuizPageState extends State<QuizPage> {
   int totalPoints = 0;
   int currentQuestion = 0;
   String displayText = '';
+  String fetchedPoints = '10';
   List<Question> questions = [
     Question(
       question: "What genre do you prefer to read?",
@@ -138,7 +127,7 @@ class _QuizPageState extends State<QuizPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => QuizResultsPage(totalPoints: totalPoints),
+          builder: (context) => BookRecommendation(totalPoints: totalPoints),
         ),
       );
     }
@@ -152,6 +141,7 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Magic Quiz'),
@@ -181,20 +171,28 @@ class _QuizPageState extends State<QuizPage> {
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               totalPoints += option["value"] as int;
                               currentQuestion++;
                               displayQuestion();
                             });
+                            final response = await request.postJson(
+                                "http://localhost:8000/post_quiz_points_flutter/",
+                                jsonEncode(<String, String>{
+                                  'points': totalPoints.toString(),
+                                }));
+                            fetchedPoints = response['points'];
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(16.0),
                           ),
                           child: Text(
                             option["option"] as String,
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
-                                fontSize: 18.0), // Change text size here
+                              fontSize: 18.0,
+                            ),
                           ),
                         ),
                       ),
@@ -202,6 +200,23 @@ class _QuizPageState extends State<QuizPage> {
                   }).toList(),
                 ],
               ),
+            const Spacer(), // Added Spacer to push the button to the bottom
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BookRecommendation(
+                          totalPoints: int.parse(fetchedPoints)),
+                    ),
+                  );
+                },
+                label: const Text('Skip to Book Recommendation'),
+                backgroundColor: Colors.indigo,
+              ),
+            ),
           ],
         ),
       ),
