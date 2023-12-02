@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/models/Book/book.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
 
 class BookRecommendation extends StatefulWidget {
@@ -48,8 +47,6 @@ class _BookRecommendationState extends State<BookRecommendation> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Book Recommendations'),
@@ -85,16 +82,15 @@ class _BookRecommendationState extends State<BookRecommendation> {
                 padding: const EdgeInsets.all(8.0),
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:
-                        orientation == Orientation.landscape ? 2 : 1,
+                    crossAxisCount: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? 2
+                        : 1,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    double screenWidth = MediaQuery.of(context).size.width;
-                    double cardTextScaleFactor = screenWidth > 600 ? 1.5 : 1.0;
-
                     return Card(
                       elevation: 5,
                       child: Padding(
@@ -103,14 +99,13 @@ class _BookRecommendationState extends State<BookRecommendation> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 200,
+                              height: 180,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                                  snapshot.data![index].fields.imageUrlL!,
+                                  snapshot.data![index].fields.imageUrlL,
                                   fit: BoxFit.cover,
-                                  width: double
-                                      .infinity, // Makes image responsive in width
+                                  width: double.infinity,
                                 ),
                               ),
                             ),
@@ -121,8 +116,8 @@ class _BookRecommendationState extends State<BookRecommendation> {
                                 children: [
                                   Text(
                                     "${snapshot.data![index].fields.title}",
-                                    style: TextStyle(
-                                      fontSize: 18.0 * cardTextScaleFactor,
+                                    style: const TextStyle(
+                                      fontSize: 13.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.center,
@@ -130,26 +125,30 @@ class _BookRecommendationState extends State<BookRecommendation> {
                                   const SizedBox(height: 6),
                                   Text(
                                     "Author: ${snapshot.data![index].fields.author}",
-                                    style: TextStyle(
-                                        fontSize: 16.0 * cardTextScaleFactor),
+                                    style: const TextStyle(
+                                      fontSize: 12.0,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "ISBN: ${snapshot.data![index].fields.isbn}",
-                                    style: TextStyle(
-                                        fontSize: 16.0 * cardTextScaleFactor),
+                                    style: const TextStyle(
+                                      fontSize: 12.0,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "Year Published: ${snapshot.data![index].fields.yearPublication}",
-                                    style: TextStyle(
-                                        fontSize: 16.0 * cardTextScaleFactor),
+                                    style: const TextStyle(
+                                      fontSize: 12.0,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "Publisher: ${snapshot.data![index].fields.publisher}",
-                                    style: TextStyle(
-                                        fontSize: 16.0 * cardTextScaleFactor),
+                                    style: const TextStyle(
+                                      fontSize: 12.0,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
