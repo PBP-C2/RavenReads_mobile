@@ -1,29 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:raven_reads_mobile/screens/magic_quiz/quiz_results.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
-
-void main() {
-  runApp(MyQuizApp());
-}
 
 class Question {
   final String question;
   final List<Map<String, dynamic>> options;
 
   Question({required this.question, required this.options});
-}
-
-class MyQuizApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Magic Quiz',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: QuizPage(),
-    );
-  }
 }
 
 class QuizPage extends StatefulWidget {
@@ -35,6 +21,7 @@ class _QuizPageState extends State<QuizPage> {
   int totalPoints = 0;
   int currentQuestion = 0;
   String displayText = '';
+  String fetchedPoints = '0';
   List<Question> questions = [
     Question(
       question: "What genre do you prefer to read?",
@@ -138,7 +125,7 @@ class _QuizPageState extends State<QuizPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => QuizResultsPage(totalPoints: totalPoints),
+          builder: (context) => BookRecommendation(totalPoints: totalPoints),
         ),
       );
     }
@@ -152,6 +139,7 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Magic Quiz'),
@@ -159,50 +147,110 @@ class _QuizPageState extends State<QuizPage> {
         foregroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                displayText,
-                style: const TextStyle(fontSize: 20.0),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            if (currentQuestion < questions.length)
-              Column(
-                children: [
-                  ...questions[currentQuestion].options.map((option) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 16.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              totalPoints += option["value"] as int;
-                              currentQuestion++;
-                              displayQuestion();
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(16.0),
-                          ),
-                          child: Text(
-                            option["option"] as String,
-                            style: const TextStyle(
-                                fontSize: 18.0), // Change text size here
-                          ),
-                        ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage('https://picsum.photos/seed/picsum/200/300'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      displayText,
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
                       ),
-                    );
-                  }).toList(),
-                ],
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ),
-          ],
+              if (currentQuestion < questions.length)
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ...questions[currentQuestion].options.map((option) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                setState(() {
+                                  totalPoints += option["value"] as int;
+                                  currentQuestion++;
+                                  displayQuestion();
+                                });
+                                final response = await request.postJson(
+                                  "http://localhost:8000/post_quiz_points_flutter/",
+                                  jsonEncode(<String, String>{
+                                    'points': totalPoints.toString(),
+                                  }),
+                                );
+                                fetchedPoints = response['points'];
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(16.0),
+                              ),
+                              child: Text(
+                                option["option"] as String,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      if (totalPoints == 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Answer at least 1 question'),
+                          ),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookRecommendation(
+                              totalPoints: int.parse(fetchedPoints),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    label: const Text('Finish Quiz'),
+                    backgroundColor: Colors.indigo,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
