@@ -51,7 +51,7 @@ class _BookStorePageState extends State<BookStorePage> {
   late Future<List<Book>> _books;
 
   Future<List<Book>> fetchProduct() async {
-    var url = Uri.parse('http://127.0.0.1:8000/api/books/');
+    var url = Uri.parse('http://127.0.0.1:8000/book_store');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -82,8 +82,9 @@ class _BookStorePageState extends State<BookStorePage> {
       appBar: AppBar(
         title: const Text(
           'LIST OF BOOKS',
-        ),
+          ),
       ),
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -100,6 +101,26 @@ class _BookStorePageState extends State<BookStorePage> {
                   ),
                 ),
               ),
+            Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // Fungsi yang akan dijalankan saat tombol Add ditekan
+                // Tambahkan logika atau perpindahan ke layar penambahan buku
+              },
+              child: Text(
+                'Add Book'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Fungsi yang akan dijalankan saat tombol See Checkout ditekan
+                // Tambahkan logika atau perpindahan ke layar checkout
+              },
+              child: Text('See Checkout'),
+            ),
+          ],
+        ),
               FutureBuilder<List<Book>>(
                 future: _books,
                 builder: (context, snapshot) {
