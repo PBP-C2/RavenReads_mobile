@@ -18,7 +18,7 @@ class _BookRecommendationState extends State<BookRecommendation> {
 
   Future<List<Book>> fetchBooks() async {
     final int points = widget.totalPoints;
-    var url = Uri.parse('http://127.0.0.1:8000/api/books/');
+    var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/api/books/');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
