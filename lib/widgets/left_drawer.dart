@@ -6,6 +6,7 @@ import 'package:raven_reads_mobile/screens/forum_discussion/main_discussion.dart
 import 'package:raven_reads_mobile/screens/book_store/book_store.dart';
 import 'package:raven_reads_mobile/screens/whole_scroll/product_list.dart';
 import 'package:raven_reads_mobile/screens/whole_scroll/shoplist_form.dart';
+
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
@@ -46,7 +47,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(
+                    builder: (context) => const MyHomePage(
                       title: "RavenReads Mobile",
                     ),
                   ));
@@ -60,7 +61,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainDiscussion(),
+                    builder: (context) => const MainDiscussion(),
                   ));
             },
           ),
@@ -78,7 +79,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.book),
-            title: const Text('SpellBook'),
+            title: const Text('Spell Book'),
             // Bagian redirection ke MyHomePage
             onTap: () {
               Navigator.pushReplacement(
@@ -90,7 +91,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.bookmark_add),
-            title: const Text('WholeScroll'),
+            title: const Text('Whole Scroll'),
             // Bagian redirection ke MyHomePage
             onTap: () {
               Navigator.pushReplacement(
