@@ -35,13 +35,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     final userProvider = Provider.of<UserProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
