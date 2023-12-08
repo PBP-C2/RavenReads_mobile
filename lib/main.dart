@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
             useMaterial3: true,
           ),
-          home: LoginPage()),
+          home: const LoginPage()),
     );
   }
 }
@@ -161,7 +161,7 @@ class ShopCard extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const BookStorePage()));
           } else if (item.name == "Logout") {
             final response = await request.logout(
-                "https://ravenreads-c02-tk.pbp.cs.ui.ac.id//auth/logout/");
+                "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/logout/");
             String message = response["message"];
             if (response['status']) {
               String uname = response["username"];
