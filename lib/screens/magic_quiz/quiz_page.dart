@@ -197,7 +197,7 @@ class _QuizPageState extends State<QuizPage> {
                                   displayQuestion();
                                 });
                                 final response = await request.postJson(
-                                  "http://localhost:8000/post_quiz_points_flutter/",
+                                  "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/post_quiz_points_flutter/",
                                   jsonEncode(<String, String>{
                                     'points': totalPoints.toString(),
                                   }),
