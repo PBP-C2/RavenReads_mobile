@@ -15,145 +15,26 @@ class BookProgressionPage extends StatefulWidget {
 
 class _BookProgressionPageState extends State<BookProgressionPage> {
   Future<List<ReadingProgress>> fetchProgress() async {
-    // // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    // var url = Uri.parse('http://127.0.0.1:8000/get-progression/');
-    // var response = await http.get(
-    //   url,
-    //   headers: {"Content-Type": "application/json"},
-    // );
+    var url =
+        Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get-progression/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
 
-    // var data = jsonDecode(utf8.decode(response.bodyBytes));
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-    // List<ReadingProgress> list_Progress = [];
-    // for (var d in data) {
-    //   if (d != null) {
-    //     list_Progress.add(ReadingProgress.fromJson(d));
-    //   }
-    // }
-
-    List<ReadingProgress> listProgress = [
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Kalkulus 1",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 100,
-              progress: 50,
-              rating: 4,
-              review: "Wow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Kalkulus 2",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 200,
-              progress: 60,
-              rating: 3,
-              review: "Wowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Aljabar Linier",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 300,
-              progress: 250,
-              rating: 5,
-              review: "Wowowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Matematika Diskret",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 500,
-              progress: 50,
-              rating: 1,
-              review: "Wowowowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "KBBI",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 1000,
-              progress: 250,
-              rating: 2,
-              review: "Wowowowowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Struktur Data dan Algoritma",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 400,
-              progress: 50,
-              rating: 1,
-              review: "Wowowowowowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Pemrograman Berbasis Platform",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 600,
-              progress: 350,
-              rating: 5,
-              review: "Wowowowowowowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Dasar-Dasar Pemrograman 1",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 700,
-              progress: 70,
-              rating: 4,
-              review: "Wowowowowowowow")),
-      ReadingProgress(
-          model: "",
-          pk: 0,
-          fields: Fields(
-              user: 0,
-              book: 0,
-              title: "Dasar-Dasar Pemrograman 2",
-              image:
-                  "http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg",
-              pages: 800,
-              progress: 200,
-              rating: 4,
-              review: "Wowowowowowowow")),
-    ];
-
+    List<ReadingProgress> listProgress = [];
+    for (var d in data) {
+      if (d != null) {
+        listProgress.add(ReadingProgress.fromJson(d));
+      }
+    }
     return listProgress;
   }
 
+  final _bookformKey = GlobalKey<FormState>();
+  static List<GlobalKey<FormState>> _reviewformKeys = [];
   static List<ReadingProgress> _listProgress = [];
   List<ReadingProgress> _progresses = List.from(_listProgress);
   Map<int, bool> _isExpanded = {};
@@ -161,7 +42,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
   bool _dropDownEnabled = false;
   bool _textFieldEnabled = false;
   int _rating = -1;
-  int _bookId = -1;
+  String _bookId = "";
   String _review = "";
   String _searchQuery = "";
 
@@ -171,8 +52,24 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _initReviewFormKeys();
+  }
+
+  Future<void> _initReviewFormKeys() async {
+    List<ReadingProgress> data = await fetchProgress();
+    setState(
+      () {
+        _reviewformKeys =
+            List.generate(data.length, (index) => GlobalKey<FormState>());
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // final request = context.watch<CookieRequest>();
+    final request = context.watch<CookieRequest>();
 
     return Scaffold(
       appBar: AppBar(
@@ -181,11 +78,11 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
         foregroundColor: Colors.white,
       ),
       backgroundColor: Colors.blue[900],
+      drawer: LeftDrawer(),
       body: Container(
         padding: EdgeInsets.all(10.0),
         child: Column(
           children: [
-            // Search bar dan Add book button
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,41 +144,88 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                   fontWeight: FontWeight.bold),
                             ),
                             backgroundColor: Colors.white,
-                            content: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter book ID",
-                                labelText: "Enter book ID",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
+                            content: Form(
+                              key: _bookformKey,
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Enter book ID",
+                                  labelText: "Enter book ID",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
                                 ),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _bookId = value!;
+                                  });
+                                },
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Book ID cannot be empty!";
+                                  }
+                                  if (int.tryParse(value) == null) {
+                                    return "Book ID has to be integer!";
+                                  }
+                                  return null;
+                                },
                               ),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  _bookId = int.parse(value!);
-                                });
-                              },
                             ),
                             actions: [
                               ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.red),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    "Close",
-                                    style: TextStyle(color: Colors.white),
-                                  )),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.red),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  "Close",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                               ElevatedButton(
                                   style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             Color.fromARGB(255, 65, 227, 70)),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    if (_bookformKey.currentState!.validate()) {
+                                      final response = await request.postJson(
+                                        "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/add-progression/",
+                                        jsonEncode(
+                                          <String, int>{
+                                            "newBook": int.parse(_bookId)
+                                          },
+                                        ),
+                                      );
+
+                                      if (response["status"] == "success") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                "The book has been successfully saved!"),
+                                          ),
+                                        );
+                                        setState(() {});
+                                      } else if (response["status"] ==
+                                          "error") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                "The book has already exist in the progress!"),
+                                          ),
+                                        );
+                                      }
+                                      _reviewformKeys
+                                          .add(new GlobalKey<FormState>());
+                                      _bookformKey.currentState!.reset();
+                                    }
+                                  },
                                   child: Text(
                                     "Add",
                                     style: TextStyle(color: Colors.white),
@@ -393,7 +337,20 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                                     color: Colors.black),
                                               ),
                                               IconButton(
-                                                onPressed: () {},
+                                                onPressed: () async {
+                                                  final response =
+                                                      await request.postJson(
+                                                    "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/increment-progress/${_progresses[index].pk}/",
+                                                    jsonEncode(
+                                                      <String, String>{},
+                                                    ),
+                                                  );
+
+                                                  if (response["status"] ==
+                                                      "success") {
+                                                    setState(() {});
+                                                  }
+                                                },
                                                 icon: Icon(
                                                   Icons.add_circle,
                                                   color: Colors.blueAccent[700],
@@ -415,11 +372,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                         ],
                                       ),
                                       leading: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.blueAccent[700]!,
-                                                width: 2),
-                                          ),
+                                          width: 40,
                                           child: Image.network(
                                               _progresses[index].fields.image)),
                                       trailing: ElevatedButton(
@@ -477,197 +430,263 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 75,
-                                                  child: Text(
-                                                    "Rating:",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
+                                        child: Form(
+                                          key: _reviewformKeys[index],
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 75,
+                                                    child: Text(
+                                                      "Rating:",
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Container(
-                                                  width: 40,
-                                                  child:
-                                                      DropdownButtonFormField<
-                                                          int>(
-                                                    value: _progresses[index]
-                                                        .fields
-                                                        .rating,
-                                                    items: [
-                                                      DropdownMenuItem(
-                                                        value: 1,
-                                                        child: Text(
-                                                          "1",
-                                                          style: TextStyle(
-                                                              color: (_dropDownEnabled)
-                                                                  ? Colors.black
-                                                                  : Colors.grey[
-                                                                      600]),
+                                                  Container(
+                                                    width: 40,
+                                                    child:
+                                                        DropdownButtonFormField<
+                                                            int>(
+                                                      value: (_progresses[index]
+                                                                  .fields
+                                                                  .rating <=
+                                                              0)
+                                                          ? null
+                                                          : _progresses[index]
+                                                              .fields
+                                                              .rating,
+                                                      items: [
+                                                        DropdownMenuItem(
+                                                          value: 1,
+                                                          child: Text(
+                                                            "1",
+                                                            style: TextStyle(
+                                                                color: (_dropDownEnabled)
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors.grey[
+                                                                        600]),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        value: 2,
-                                                        child: Text(
-                                                          "2",
-                                                          style: TextStyle(
-                                                              color: (_dropDownEnabled)
-                                                                  ? Colors.black
-                                                                  : Colors.grey[
-                                                                      600]),
+                                                        DropdownMenuItem(
+                                                          value: 2,
+                                                          child: Text(
+                                                            "2",
+                                                            style: TextStyle(
+                                                                color: (_dropDownEnabled)
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors.grey[
+                                                                        600]),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        value: 3,
-                                                        child: Text(
-                                                          "3",
-                                                          style: TextStyle(
-                                                              color: (_dropDownEnabled)
-                                                                  ? Colors.black
-                                                                  : Colors.grey[
-                                                                      600]),
+                                                        DropdownMenuItem(
+                                                          value: 3,
+                                                          child: Text(
+                                                            "3",
+                                                            style: TextStyle(
+                                                                color: (_dropDownEnabled)
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors.grey[
+                                                                        600]),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        value: 4,
-                                                        child: Text(
-                                                          "4",
-                                                          style: TextStyle(
-                                                              color: (_dropDownEnabled)
-                                                                  ? Colors.black
-                                                                  : Colors.grey[
-                                                                      600]),
+                                                        DropdownMenuItem(
+                                                          value: 4,
+                                                          child: Text(
+                                                            "4",
+                                                            style: TextStyle(
+                                                                color: (_dropDownEnabled)
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors.grey[
+                                                                        600]),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        value: 5,
-                                                        child: Text(
-                                                          "5",
-                                                          style: TextStyle(
-                                                              color: (_dropDownEnabled)
-                                                                  ? Colors.black
-                                                                  : Colors.grey[
-                                                                      600]),
+                                                        DropdownMenuItem(
+                                                          value: 5,
+                                                          child: Text(
+                                                            "5",
+                                                            style: TextStyle(
+                                                                color: (_dropDownEnabled)
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors.grey[
+                                                                        600]),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                    onChanged: _dropDownEnabled
-                                                        ? (value) {
-                                                            setState(() {
-                                                              _rating = value!;
-                                                            });
-                                                          }
-                                                        : null,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 75,
-                                                  child: Text(
-                                                    "Review:",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
+                                                      ],
+                                                      onChanged:
+                                                          _dropDownEnabled
+                                                              ? (value) {
+                                                                  setState(() {
+                                                                    _rating =
+                                                                        value!;
+                                                                  });
+                                                                }
+                                                              : null,
+                                                      validator: (int? value) {
+                                                        if (value == null ||
+                                                            value <= 0) {
+                                                          return "Rating cannot be empty!";
+                                                        }
+                                                        return null;
+                                                      },
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: TextFormField(
-                                                    maxLines: null,
-                                                    keyboardType:
-                                                        TextInputType.multiline,
-                                                    textInputAction:
-                                                        TextInputAction.newline,
-                                                    initialValue:
-                                                        _progresses[index]
-                                                            .fields
-                                                            .review,
-                                                    enabled: _textFieldEnabled,
-                                                    style: TextStyle(
-                                                      color: (_textFieldEnabled)
-                                                          ? Colors.black
-                                                          : Colors.grey[600],
-                                                      fontSize: 16,
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 75,
+                                                    child: Text(
+                                                      "Review:",
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
                                                     ),
-                                                    onChanged: (String? value) {
+                                                  ),
+                                                  Expanded(
+                                                    child: TextFormField(
+                                                      maxLines: null,
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .multiline,
+                                                      textInputAction:
+                                                          TextInputAction
+                                                              .newline,
+                                                      initialValue:
+                                                          _progresses[index]
+                                                              .fields
+                                                              .review,
+                                                      enabled:
+                                                          _textFieldEnabled,
+                                                      style: TextStyle(
+                                                        color:
+                                                            (_textFieldEnabled)
+                                                                ? Colors.black
+                                                                : Colors
+                                                                    .grey[600],
+                                                        fontSize: 16,
+                                                      ),
+                                                      onChanged:
+                                                          (String? value) {
+                                                        setState(() {
+                                                          _review = value!;
+                                                        });
+                                                      },
+                                                      validator:
+                                                          (String? value) {
+                                                        return null;
+                                                      },
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all<Color>(Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      182,
+                                                                      181,
+                                                                      181)),
+                                                    ),
+                                                    onPressed: () {
                                                       setState(() {
-                                                        _review = value!;
+                                                        toggleEnabled();
                                                       });
                                                     },
+                                                    child: Text(
+                                                      "Edit",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all<Color>(
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    182,
-                                                                    181,
-                                                                    181)),
+                                                  SizedBox(width: 10),
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all<Color>(Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      65,
+                                                                      227,
+                                                                      70)),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (_reviewformKeys[index]
+                                                          .currentState!
+                                                          .validate()) {
+                                                        final response =
+                                                            await request
+                                                                .postJson(
+                                                          "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/add-review/${_progresses[index].pk}/",
+                                                          jsonEncode(
+                                                            <String, String>{
+                                                              "rating": _rating
+                                                                  .toString(),
+                                                              "review": _review,
+                                                            },
+                                                          ),
+                                                        );
+
+                                                        if (response[
+                                                                "status"] ==
+                                                            "success") {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            const SnackBar(
+                                                              content: Text(
+                                                                  "New review has been saved!"),
+                                                            ),
+                                                          );
+                                                        }
+                                                        if (_dropDownEnabled) {
+                                                          toggleEnabled();
+                                                        }
+                                                        setState(() {});
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      "Save",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
                                                   ),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      toggleEnabled();
-                                                    });
-                                                  },
-                                                  child: Text(
-                                                    "Edit",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 10),
-                                                ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all<Color>(
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    65,
-                                                                    227,
-                                                                    70)),
-                                                  ),
-                                                  onPressed: () async {},
-                                                  child: Text(
-                                                    "Save",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 20),
-                                              ],
-                                            )
-                                          ],
+                                                  SizedBox(width: 20),
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
