@@ -64,15 +64,15 @@ Widget build(BuildContext context) {
         },
         child: Card(
           child: SizedBox(
-            width: 595.0, // Set the width
-            height: 842.0, // Set the height
+            width: 400.0, // Set the width
+            height: 600.0, // Set the height
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Your image widget with BoxFit.cover
                 SizedBox(
-                  height: 200.0, // Adjust as needed
-                  width: double.infinity, // Take the full width
+                  height: 100.0, // Adjust as needed
+                  width: 300.0, // Take the full width
                   child: Image.network(
                     product.imageurl,
                     fit: BoxFit.cover,
