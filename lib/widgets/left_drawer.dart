@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raven_reads_mobile/main.dart';
-import 'package:raven_reads_mobile/screens/book_store/book_store.dart';
+import 'package:raven_reads_mobile/screens/book_progress/book_progress.dart';
 import 'package:raven_reads_mobile/screens/magic_quiz/quiz_page.dart';
 import 'package:raven_reads_mobile/screens/forum_discussion/main_discussion.dart';
 import 'package:raven_reads_mobile/screens/book_store/book_store.dart';
@@ -110,6 +110,17 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => BookStorePage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.menu_book_outlined),
+            title: const Text('Book Progress'),
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookProgressionPage(),
                   ));
             },
           ),
