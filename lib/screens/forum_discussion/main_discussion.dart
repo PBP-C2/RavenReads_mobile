@@ -150,9 +150,11 @@ class _MainDiscussionState extends State<MainDiscussion> {
       var wizardCard = _createWizardCard(wizardThread, personName, context);
       cards.add(wizardCard);
     }
+    cards = cards.reversed.toList();
 
     // Fetch and process Muggle threads
     List<MuggleThread> muggleThreads = await fetchMuggleThread();
+    muggleThreads = muggleThreads.reversed.toList();
     for (var muggleThread in muggleThreads) {
       String personName = await getPersonName(muggleThread.fields.person);
       var muggleCard = _createMuggleCard(muggleThread, personName, context);

@@ -57,57 +57,64 @@ class _MyHomePageState extends State<MyHomePage> {
   // always marked "final".;
 
   final List<ShopItem> items = [
-    ShopItem("Discussion Forum", Icons.checklist, Colors.blue),
-    ShopItem("Magic Quiz", Icons.add_shopping_cart, Colors.green),
-    ShopItem("Spell Book", Icons.checklist, Colors.yellow),
-    ShopItem("Whole Scroll", Icons.checklist, Colors.orange),
-    ShopItem("Book Store", Icons.checklist, Colors.pink),
-    ShopItem("Logout", Icons.logout, Colors.red),
+    ShopItem("Discussion Forum", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Magic Quiz", Icons.add_shopping_cart, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Spell Book", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Whole Scroll", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Book Store", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Logout", Icons.logout, const Color.fromARGB(255, 134, 31, 24)),
   ];
 
-  @override
+  
+
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'RavenReads',
-        ),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-      ),
       drawer: const LeftDrawer(),
       body: SingleChildScrollView(
-        // Widget wrapper yang dapat discroll
-        child: Padding(
-          padding: const EdgeInsets.all(10.0), // Set padding dari halaman
+        child: Container(
+          color: const Color.fromARGB(255, 12, 39, 61), // Dark background color
           child: Column(
-            // Widget untuk menampilkan children secara vertikal
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                // Widget Text untuk menampilkan tulisan dengan alignment center dan style yang sesuai
-                child: Text(
-                  'Welcome to RavenReads', // Text yang menandakan toko
+              Container(
+                color: const Color.fromARGB(255, 12, 39, 61), // Top section color
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 60.0), // Increased vertical padding
+                child: const Text(
+                  'Welcome to RavenReads',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
-              // Grid layout
-              GridView.count(
-                // Container pada card kita.
-                primary: true,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                children: items.map((ShopItem item) {
-                  // Iterasi untuk setiap item
-                  return ShopCard(item);
-                }).toList(),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white, // Bottom section color
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  ),
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 20), // Padding adjusted for curved top and spacing
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Number of columns
+                    crossAxisSpacing: 5, // Horizontal space between items
+                    mainAxisSpacing: 5, // Vertical space between items
+                    childAspectRatio: 1.6, // Aspect ratio of the buttons
+                  ),
+                  primary: false,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return ShopCard(items[index]);
+                  },
+                ),
               ),
             ],
           ),
@@ -129,14 +136,17 @@ class ShopCard extends StatelessWidget {
   final ShopItem item;
   const ShopCard(this.item, {super.key}); // Constructor
 
+
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
-    return Material(
+  final request = context.watch<CookieRequest>(); 
+    return Card(
       color: item.color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25), // Rounded corners
+      ),
       child: InkWell(
-        // Area responsive terhadap sentuhan
-        onTap: () async {
+          onTap: () async {
           // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -179,29 +189,99 @@ class ShopCard extends StatelessWidget {
             }
           }
         },
-        child: Container(
-          // Container untuk menyimpan Icon dan Text
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                item.icon,
+                color: Colors.white,
+                size: 40, // Icon size
+              ),
+              Text(
+                item.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                   color: Colors.white,
-                  size: 30.0,
+                  fontSize: 18, // Font size
                 ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
+    
+    // return Material(
+    //   color: item.color,
+    //   child: InkWell(
+    //     // Area responsive terhadap sentuhan
+    //     onTap: () async {
+    //       // Memunculkan SnackBar ketika diklik
+    //       ScaffoldMessenger.of(context)
+    //         ..hideCurrentSnackBar()
+    //         ..showSnackBar(SnackBar(
+    //             content: Text("Kamu telah menekan tombol ${item.name}!")));
+    //       if (item.name == "Discussion Forum") {
+    //         Navigator.push(
+    //             context,
+    //             MaterialPageRoute(
+    //                 builder: (context) => const MainDiscussion()));
+    //       } else if (item.name == "Magic Quiz") {
+    //         Navigator.push(
+    //             context, MaterialPageRoute(builder: (context) => QuizPage()));
+    //       } else if (item.name == "Spell Book") {
+    //         Navigator.push(context,
+    //             MaterialPageRoute(builder: (context) => const ShopFormPage()));
+    //       } else if (item.name == "Whole Scroll") {
+    //         Navigator.push(context,
+    //             MaterialPageRoute(builder: (context) => ProductListPage()));
+    //       } else if (item.name == "Book Store") {
+    //         Navigator.push(context,
+    //             MaterialPageRoute(builder: (context) => const BookStorePage()));
+    //       } else if (item.name == "Logout") {
+    //         final response = await request.logout(
+    //             "https://ravenreads-c02-tk.pbp.cs.ui.ac.id//auth/logout/");
+    //         String message = response["message"];
+    //         if (response['status']) {
+    //           String uname = response["username"];
+    //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //             content: Text("$message Sampai jumpa, $uname."),
+    //           ));
+    //           Navigator.pushReplacement(
+    //             context,
+    //             MaterialPageRoute(builder: (context) => const LoginPage()),
+    //           );
+    //         } else {
+    //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //             content: Text("$message"),
+    //           ));
+    //         }
+    //       }
+    //     },
+    //     child: Container(
+    //       // Container untuk menyimpan Icon dan Text
+    //       padding: const EdgeInsets.all(8),
+    //       child: Center(
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [
+    //             Icon(
+    //               item.icon,
+    //               color: Colors.white,
+    //               size: 30.0,
+    //             ),
+    //             const Padding(padding: EdgeInsets.all(3)),
+    //             Text(
+    //               item.name,
+    //               textAlign: TextAlign.center,
+    //               style: const TextStyle(color: Colors.white),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:raven_reads_mobile/widgets/Discussion%20Forum/MainDiscussionFormModal.dart';
 import 'package:provider/provider.dart';
 import 'package:raven_reads_mobile/models/UserProvider.dart';
+import 'package:raven_reads_mobile/models/Discussion Forum/MuggleThread.dart';
+import 'package:raven_reads_mobile/models/Discussion Forum/WizardThread.dart';
 
 class ReplyThreadScreen extends StatefulWidget {
   final int id;
@@ -19,6 +21,41 @@ class ReplyThreadScreen extends StatefulWidget {
 
 class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
   late Future<List<ReplyThread>> futureReplyThreads;
+  late Future<List<String>> futurePersonName;
+  late Future<MuggleThread> futureMainThread;
+
+  Future<MuggleThread> fetchMuggleThread(int id) async {
+  var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_thread_json/$id');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      // Decode the response body into JSON.
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      // Convert the JSON data into a MuggleThread object.
+      return MuggleThread.fromJson(data);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load MuggleThread');
+    }
+  }
+
+  Future<WizardThread> fetchWizardThread(int id) async {
+    var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_thread_json/$id');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    // melakukan decode response menjadi bentuk json
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    return data;
+  }
 
   Future<String> getPersonName(int id) async {
     var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_person_name_flutter/$id'); // Replace with your actual endpoint
@@ -47,6 +84,8 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
     super.initState();
     // Initialize futureReplyThreads with the initial data
     futureReplyThreads = fetchReplyThreads(widget.id);
+    futurePersonName = fetchPersonNamesFromThreads();
+    futureMainThread = fetchMuggleThread(widget.id);
   }
 
   Future<List<ReplyThread>> fetchReplyThreads(int id) async {
@@ -61,10 +100,33 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
     }
   }
 
+  Future<List<String>> fetchPersonNamesFromThreads() async {
+    // Wait for the reply threads to finish fetching.
+    List<ReplyThread> replyThreads = await futureReplyThreads;
+
+    // Create a list to hold the names.
+    List<String> names = [];
+
+    // Iterate over the reply threads and fetch each person's name.
+    for (var thread in replyThreads) {
+      try {
+        String name = await getPersonName(thread.fields.person);
+        names.add(name);
+      } catch (e) {
+        // If there's an error, add a default name or handle it accordingly.
+        names.add('Unknown');
+      }
+    }
+
+    return names;
+  }
+
+
   Future<void> _refreshData() async {
     setState(() {
       // Re-fetch the data
       futureReplyThreads = fetchReplyThreads(widget.id);
+      futurePersonName = fetchPersonNamesFromThreads();
     });
   }
 
@@ -93,11 +155,42 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final replyThread = snapshot.data![index];
-                return Card(
-                  child: ListTile(
-                    title: Text(replyThread.fields.content),
-                    // Add other card details as needed
-                  ),
+                return FutureBuilder<List<String>>(
+                  future: futurePersonName,
+                  builder: (context, nameSnapshot) {
+                    if (nameSnapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (nameSnapshot.hasError) {
+                      return Center(child: Text('Error: ${nameSnapshot.error}'));
+                    } else if (!nameSnapshot.hasData || nameSnapshot.data!.isEmpty) {
+                      return const Center(child: Text('Unknown'));
+                    } else {
+                      return Card(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage("https://api.ambr.top/assets/UI/UI_AvatarIcon_Neuvillette.png?vh=2023100601"), // Replace with actual URL
+                            radius: 20,
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(nameSnapshot.data![index]), // Person's name
+                              Text(replyThread.fields.dateCreated.toString()), // Date of creation, formatted
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  replyThread.fields.content.length > 100 
+                                    ? replyThread.fields.content.substring(0, 100) + '...'
+                                    : replyThread.fields.content, // First 100 characters of content
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 );
               },
             );
