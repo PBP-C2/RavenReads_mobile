@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:raven_reads_mobile/screens/book_progress/book_progress.dart';
 import 'package:raven_reads_mobile/screens/book_store/book_store.dart';
 import 'package:raven_reads_mobile/screens/login/login.dart';
 import 'package:raven_reads_mobile/screens/magic_quiz/quiz_page.dart';
@@ -57,17 +58,22 @@ class _MyHomePageState extends State<MyHomePage> {
   // always marked "final".;
 
   final List<ShopItem> items = [
-    ShopItem("Discussion Forum", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
-    ShopItem("Magic Quiz", Icons.add_shopping_cart, const Color.fromARGB(255, 12, 39, 61)),
-    ShopItem("Spell Book", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
-    ShopItem("Whole Scroll", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
-    ShopItem("Book Store", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Discussion Forum", Icons.checklist,
+        const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Magic Quiz", Icons.add_shopping_cart,
+        const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem(
+        "Spell Book", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem(
+        "Whole Scroll", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem(
+        "Book Store", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Book Progress", Icons.menu_book_outlined,
+        const Color.fromARGB(255, 12, 39, 61)),
     ShopItem("Logout", Icons.logout, const Color.fromARGB(255, 134, 31, 24)),
   ];
 
-  
-
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const LeftDrawer(),
@@ -77,9 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               Container(
-                color: const Color.fromARGB(255, 12, 39, 61), // Top section color
+                color:
+                    const Color.fromARGB(255, 12, 39, 61), // Top section color
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 60.0), // Increased vertical padding
+                padding: const EdgeInsets.symmetric(
+                    vertical: 60.0), // Increased vertical padding
                 child: const Text(
                   'Welcome to RavenReads',
                   textAlign: TextAlign.center,
@@ -99,7 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     topRight: Radius.circular(50),
                   ),
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 60, 20, 20), // Padding adjusted for curved top and spacing
+                padding: const EdgeInsets.fromLTRB(20, 60, 20,
+                    20), // Padding adjusted for curved top and spacing
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // Number of columns
@@ -136,17 +145,16 @@ class ShopCard extends StatelessWidget {
   final ShopItem item;
   const ShopCard(this.item, {super.key}); // Constructor
 
-
   @override
   Widget build(BuildContext context) {
-  final request = context.watch<CookieRequest>(); 
+    final request = context.watch<CookieRequest>();
     return Card(
       color: item.color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25), // Rounded corners
       ),
       child: InkWell(
-          onTap: () async {
+        onTap: () async {
           // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -169,6 +177,11 @@ class ShopCard extends StatelessWidget {
           } else if (item.name == "Book Store") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const BookStorePage()));
+          } else if (item.name == "Book Progress") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const BookProgressionPage()));
           } else if (item.name == "Logout") {
             final response = await request.logout(
                 "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/logout/");
@@ -211,7 +224,7 @@ class ShopCard extends StatelessWidget {
         ),
       ),
     );
-    
+
     // return Material(
     //   color: item.color,
     //   child: InkWell(
