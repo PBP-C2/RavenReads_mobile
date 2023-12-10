@@ -22,27 +22,10 @@ class ReplyThreadScreen extends StatefulWidget {
 class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
   late Future<List<ReplyThread>> futureReplyThreads;
   late Future<List<String>> futurePersonName;
-  late Future<MuggleThread> futureMainThread;
+  late Future<List<MuggleThread>> futureMainThread;
 
-  Future<MuggleThread> fetchMuggleThread(int id) async {
-  var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_thread_json/$id');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
+  
 
-    if (response.statusCode == 200) {
-      // Decode the response body into JSON.
-      var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-      // Convert the JSON data into a MuggleThread object.
-      return MuggleThread.fromJson(data);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load MuggleThread');
-    }
-  }
 
   Future<WizardThread> fetchWizardThread(int id) async {
     var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_thread_json/$id');
@@ -100,6 +83,21 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
     }
   }
 
+  Future<List<MuggleThread>> fetchMuggleThread(int id) async {
+  var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_main_thread_by_id/$id');
+  var response = await http.get(
+    url,
+    headers: {"Content-Type": "application/json"},
+  );
+
+  if (response.statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+      return data.map((d) => MuggleThread.fromJson(d)).toList();
+    } else {
+      throw Exception('Failed to load threads');
+    }
+}
+
   Future<List<String>> fetchPersonNamesFromThreads() async {
     // Wait for the reply threads to finish fetching.
     List<ReplyThread> replyThreads = await futureReplyThreads;
@@ -141,7 +139,49 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
         title: Text('Threads'),
       ),
       drawer: const LeftDrawer(),
-      body: FutureBuilder<List<ReplyThread>>(
+      body: Column(
+        children: [
+          FutureBuilder<List<MuggleThread>>(
+            future: futureMainThread,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text("Belum ada thread yang dibuat"));
+              } else {
+                return Card(
+                  color: Colors.orange,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage("https://api.ambr.top/assets/UI/UI_AvatarIcon_Neuvillette.png?vh=2023100601"), // Replace with actual URL
+                      radius: 20,
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(username), // Person's name
+                        Text(snapshot.data![0].fields.dateCreated.toString()), // Date of creation, formatted
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            snapshot.data![0].fields.content.length > 100 
+                              ? snapshot.data![0].fields.content.substring(0, 100) + '...'
+                              : snapshot.data![0].fields.content, // First 100 characters of content
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+          Expanded(
+            child: 
+          FutureBuilder<List<ReplyThread>>(
         future: futureReplyThreads,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -192,11 +232,17 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
                     }
                   },
                 );
+            
               },
             );
           }
         },
       ),
+          ),
+      ],
+      ),
+      
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.push(
