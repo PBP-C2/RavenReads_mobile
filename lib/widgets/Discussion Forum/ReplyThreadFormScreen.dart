@@ -75,7 +75,7 @@ class _ReplyThreadFormScreenState extends State<ReplyThreadFormScreen> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
-                                "http://127.0.0.1:8000/reply_discussion_flutter/",
+                                "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/reply_discussion_flutter/",
                                 jsonEncode(<String, String>{
                                     'user_id': id.toString(),
                                     'main_thread_id': widget.main_thread_id.toString(),
@@ -86,10 +86,7 @@ class _ReplyThreadFormScreenState extends State<ReplyThreadFormScreen> {
                                         .showSnackBar(const SnackBar(
                                     content: Text("Produk baru berhasil disimpan!"),
                                     ));
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => MyHomePage(title: "Raven Reads Mobile")),
-                                    );
+                                    Navigator.pop(context, 'submitted');
                                 } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(

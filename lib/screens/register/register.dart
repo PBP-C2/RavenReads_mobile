@@ -17,10 +17,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  String? _userType = 'Wizard'; // Set default user type value
+  String? _selectedGender = 'Male'; // Set default gender value
 
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
+    // final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registration'),
@@ -60,7 +63,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 12.0),
               TextFormField(
                 controller: _confirmPasswordController,
                 decoration: const InputDecoration(
@@ -74,13 +77,71 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 36.0),
+              const SizedBox(height: 12.0),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter an email';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12.0),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  labelText: 'Select Type',
+                ),
+                value: _userType,
+                onChanged: (String? value) {
+                  setState(() {
+                    _userType = value;
+                  });
+                },
+                items: <String>[
+                  'Wizard',
+                  'Muggles',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 24.0),
+
+              // Dropdown for gender
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  labelText: 'Select Gender',
+                ),
+                value: _selectedGender,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedGender = value;
+                  });
+                },
+                items: <String>[
+                  'Male',
+                  'Female',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String username = _usernameController.text;
                     String password = _passwordController.text;
                     String confirmPassword = _confirmPasswordController.text;
+                    String email = _emailController.text;
 
                     if (password != confirmPassword) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -114,10 +175,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
                       final response = await http.post(
                         Uri.parse(
-                            'http://127.0.0.1:8000/auth/register/'),
+                            'https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/register/'),
                         body: {
                           'username': username,
                           'password': password,
+                          'email': email,
+                          'type': _userType ?? 'Muggle',
+                          'gender': _selectedGender ?? 'Male',
                         },
                       );
 
@@ -165,6 +229,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Dispose controllers when the widget is disposed
     _usernameController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 }
