@@ -6,7 +6,7 @@ Link Web : [Raven Reads](https://ravenreads-c02-tk.pbp.cs.ui.ac.id)
 
 Link Web : [Berita Acara](https://docs.google.com/spreadsheets/d/15F-hQN4qxcnZSsYZ3SRkwA9IR-BHAAaVXKwcpnxNT00/edit#gid=0)
 
-Link Aplikasi : TBA
+Link Aplikasi : [Application Link](https://install.appcenter.ms/orgs/pbp-c2/apps/ravenreads_mobile/distribution_groups/public/releases/1)
 
 <details>
 <summary> Anggota</summary>
