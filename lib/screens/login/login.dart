@@ -35,13 +35,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     final userProvider = Provider.of<UserProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -78,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
                 final response = await request.login(
-                    "http://127.0.0.1:8000/auth/login/",
+                    "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/login/",
                     {
                       'username': username,
                       'password': password,

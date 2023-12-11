@@ -98,7 +98,7 @@ class _MainDiscussionFormScreenState extends State<MainDiscussionFormScreen> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
-                                "http://127.0.0.1:8000/create_main_discussion_flutter/",
+                                "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/create_main_discussion_flutter/",
                                 jsonEncode(<String, String>{
                                     'id': widget.id.toString(),
                                     'title': _title,
@@ -109,10 +109,7 @@ class _MainDiscussionFormScreenState extends State<MainDiscussionFormScreen> {
                                         .showSnackBar(const SnackBar(
                                     content: Text("Produk baru berhasil disimpan!"),
                                     ));
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => MyHomePage(title: "Raven Reads Mobile")),
-                                    );
+                                    Navigator.pop(context, 'submitted');
                                 } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(

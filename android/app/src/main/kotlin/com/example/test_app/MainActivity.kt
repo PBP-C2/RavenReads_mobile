@@ -1,4 +1,4 @@
-package com.example.raven_reads_mobile
+package com.example.test_app
 
 import io.flutter.embedding.android.FlutterActivity
 
