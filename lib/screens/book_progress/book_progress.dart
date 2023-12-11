@@ -14,6 +14,25 @@ class BookProgressionPage extends StatefulWidget {
 }
 
 class _BookProgressionPageState extends State<BookProgressionPage> {
+  final _bookformKey = GlobalKey<FormState>();
+  static List<GlobalKey<FormState>> _reviewformKeys = [];
+  static List<ReadingProgress> _listProgress = [];
+  List<ReadingProgress> _progresses = List.from(_listProgress);
+  Map<int, bool> _isExpanded = {};
+  int _lastExpanded = -1;
+  bool _canReview = false;
+  bool _dropDownEnabled = false;
+  bool _textFieldEnabled = false;
+  int _rating = -1;
+  String _bookId = "";
+  String _review = "";
+  String _searchQuery = "";
+
+  void toggleEnabled() {
+    _dropDownEnabled = !_dropDownEnabled;
+    _textFieldEnabled = !_textFieldEnabled;
+  }
+
   Future<List<ReadingProgress>> fetchProgress() async {
     var url =
         Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get-progression/');
@@ -33,28 +52,16 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
     return listProgress;
   }
 
-  final _bookformKey = GlobalKey<FormState>();
-  static List<GlobalKey<FormState>> _reviewformKeys = [];
-  static List<ReadingProgress> _listProgress = [];
-  List<ReadingProgress> _progresses = List.from(_listProgress);
-  Map<int, bool> _isExpanded = {};
-  int _lastExpanded = -1;
-  bool _dropDownEnabled = false;
-  bool _textFieldEnabled = false;
-  int _rating = -1;
-  String _bookId = "";
-  String _review = "";
-  String _searchQuery = "";
-
-  void toggleEnabled() {
-    _dropDownEnabled = !_dropDownEnabled;
-    _textFieldEnabled = !_textFieldEnabled;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initReviewFormKeys();
+  Future<bool> fetchUserType() async {
+    var url =
+        Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get-person/');
+    var response = await http.get(url);
+    var data = json.decode(response.body);
+    if (data["type"] == "Wizard") {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> _initReviewFormKeys() async {
@@ -65,6 +72,18 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
             List.generate(data.length, (index) => GlobalKey<FormState>());
       },
     );
+  }
+
+  Future<void> _canUserReview() async {
+    _canReview = await fetchUserType();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initReviewFormKeys();
+    _canUserReview();
   }
 
   @override
@@ -242,7 +261,6 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
             SizedBox(
               height: 10.0,
             ),
-            // List
             FutureBuilder(
               future: fetchProgress(),
               builder: (context, AsyncSnapshot snapshot) {
@@ -376,44 +394,58 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                           child: Image.network(
                                               _progresses[index].fields.image)),
                                       trailing: ElevatedButton(
-                                        onPressed: () {
-                                          setState(
-                                            () {
-                                              if (_lastExpanded == index) {
-                                                _isExpanded[index] =
-                                                    !_isExpanded[index]!;
-                                                _lastExpanded = -1;
-                                              } else {
-                                                if (_lastExpanded != -1) {
-                                                  _isExpanded[_lastExpanded] =
-                                                      false;
+                                          onPressed: _canReview
+                                              ? () {
+                                                  setState(
+                                                    () {
+                                                      if (_lastExpanded ==
+                                                          index) {
+                                                        _isExpanded[index] =
+                                                            !_isExpanded[
+                                                                index]!;
+                                                        _lastExpanded = -1;
+                                                      } else {
+                                                        if (_lastExpanded !=
+                                                            -1) {
+                                                          _isExpanded[
+                                                                  _lastExpanded] =
+                                                              false;
+                                                        }
+                                                        _isExpanded[index] =
+                                                            true;
+                                                        _lastExpanded = index;
+                                                      }
+                                                      if (_dropDownEnabled) {
+                                                        toggleEnabled();
+                                                      }
+                                                    },
+                                                  );
                                                 }
-                                                _isExpanded[index] = true;
-                                                _lastExpanded = index;
-                                              }
-                                              if (_dropDownEnabled) {
-                                                toggleEnabled();
-                                              }
-                                            },
-                                          );
-                                        },
-                                        style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
+                                              : null,
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
                                             ),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    _canReview
+                                                        ? Colors.blueAccent[700]
+                                                        : Colors.grey[600]),
                                           ),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.blueAccent[700]),
-                                        ),
-                                        child: Text(
-                                          "Review",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
+                                          child: Tooltip(
+                                            message: _canReview
+                                                ? ""
+                                                : 'Only Wizard user can give review',
+                                            child: Text(
+                                              "Review",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )),
                                     ),
                                   ),
                                   if (_isExpanded[index]!)
