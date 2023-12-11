@@ -249,29 +249,72 @@ class _MainDiscussionState extends State<MainDiscussion> {
     return Scaffold(
         appBar: CurvedAppBar(),
         drawer: const LeftDrawer(),
-        body: FutureBuilder<List<Widget>>(
-          future: cardContent,
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              if (!snapshot.hasData) {
-                return const Column(
-                  children: [Text("Belum ada thread yang dibuat")],
-                );
-              } else {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return snapshot.data![index];
-                  },
-                );
-              }
-            }
-          },
-        ),
+        body: Container (
+            color: const Color.fromARGB(255, 12, 39, 61), // Dark background color
+            child: Column (
+              children: <Widget>[
+                Container(
+                  color:const Color.fromARGB(255, 12, 39, 61), // Top section color
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 60.0), // Increased vertical padding
+                  child: const Text(
+                    'Main Discussion',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Bottom section color
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(100),
+                          topRight: Radius.circular(100),
+                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),    
+                  child: FutureBuilder<List<Widget>>(
+                    future: cardContent,
+                    builder: (context, snapshot) {
+                      if (snapshot.data == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        if (!snapshot.hasData) {
+                          return const Column(
+                            children: [Text("Belum ada thread yang dibuat")],
+                          );
+                        } else {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return snapshot.data![index];
+                            },
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+                  ),
+                  ),
+                  ),
+              ],
+            )
+          ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             // Action to be taken when the button is pressed

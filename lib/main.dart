@@ -76,7 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const LeftDrawer(),
+      // appBar: CurvedAppBar(),
+      // drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         child: Container(
           color: const Color.fromARGB(255, 12, 39, 61), // Dark background color
@@ -130,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
+  } 
 }
 
 class ShopItem {
