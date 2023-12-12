@@ -54,7 +54,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
 
   Future<bool> fetchUserType() async {
     var url =
-        Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get-person/');
+        Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get-person-type/');
     var response = await http.get(url);
     var data = json.decode(response.body);
     if (data["type"] == "Wizard") {
@@ -205,50 +205,50 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                 ),
                               ),
                               ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Color.fromARGB(255, 65, 227, 70)),
-                                  ),
-                                  onPressed: () async {
-                                    if (_bookformKey.currentState!.validate()) {
-                                      final response = await request.postJson(
-                                        "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/add-progression/",
-                                        jsonEncode(
-                                          <String, int>{
-                                            "newBook": int.parse(_bookId)
-                                          },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color.fromARGB(255, 65, 227, 70)),
+                                ),
+                                onPressed: () async {
+                                  if (_bookformKey.currentState!.validate()) {
+                                    final response = await request.postJson(
+                                      "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/add-progression/",
+                                      jsonEncode(
+                                        <String, int>{
+                                          "newBook": int.parse(_bookId)
+                                        },
+                                      ),
+                                    );
+
+                                    if (response["status"] == "success") {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              "The book has been successfully saved!"),
                                         ),
                                       );
-
-                                      if (response["status"] == "success") {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                "The book has been successfully saved!"),
-                                          ),
-                                        );
-                                        setState(() {});
-                                      } else if (response["status"] ==
-                                          "error") {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                "The book has already exist in the progress!"),
-                                          ),
-                                        );
-                                      }
                                       _reviewformKeys
                                           .add(new GlobalKey<FormState>());
-                                      _bookformKey.currentState!.reset();
+                                      setState(() {});
+                                    } else if (response["status"] == "error") {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              "The book has already exist in the progress!"),
+                                        ),
+                                      );
                                     }
-                                  },
-                                  child: Text(
-                                    "Add",
-                                    style: TextStyle(color: Colors.white),
-                                  ))
+                                    _bookformKey.currentState!.reset();
+                                  }
+                                },
+                                child: Text(
+                                  "Add",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
                             ],
                           );
                         },
@@ -266,9 +266,10 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return const Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.orange,
-                  ));
+                    child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    ),
+                  );
                 } else {
                   if (!snapshot.hasData || snapshot.data.isEmpty) {
                     return const Column(
@@ -288,7 +289,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                     );
                   } else {
                     _listProgress = snapshot.data!;
-                    _progresses = List.from(_listProgress);
+                    _progresses = List<ReadingProgress>.from(snapshot.data!);
                     if (_searchQuery.isNotEmpty) {
                       _progresses = _listProgress
                           .where((element) => element.fields.title
@@ -296,6 +297,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                               .contains(_searchQuery))
                           .toList();
                     }
+                    _progresses.sort((a, b) => a.pk.compareTo(b.pk));
                     if (_progresses.length == 0) {
                       return const Column(
                         children: [
@@ -366,6 +368,14 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
 
                                                   if (response["status"] ==
                                                       "success") {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                            "Succesfully added one page to the progress!"),
+                                                      ),
+                                                    );
                                                     setState(() {});
                                                   }
                                                 },
@@ -390,62 +400,61 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                         ],
                                       ),
                                       leading: Container(
-                                          width: 40,
-                                          child: Image.network(
-                                              _progresses[index].fields.image)),
+                                        width: 40,
+                                        child: Image.network(
+                                            _progresses[index].fields.image),
+                                      ),
                                       trailing: ElevatedButton(
-                                          onPressed: _canReview
-                                              ? () {
-                                                  setState(
-                                                    () {
-                                                      if (_lastExpanded ==
-                                                          index) {
-                                                        _isExpanded[index] =
-                                                            !_isExpanded[
-                                                                index]!;
-                                                        _lastExpanded = -1;
-                                                      } else {
-                                                        if (_lastExpanded !=
-                                                            -1) {
-                                                          _isExpanded[
-                                                                  _lastExpanded] =
-                                                              false;
-                                                        }
-                                                        _isExpanded[index] =
-                                                            true;
-                                                        _lastExpanded = index;
+                                        onPressed: _canReview
+                                            ? () {
+                                                setState(
+                                                  () {
+                                                    if (_lastExpanded ==
+                                                        index) {
+                                                      _isExpanded[index] =
+                                                          !_isExpanded[index]!;
+                                                      _lastExpanded = -1;
+                                                    } else {
+                                                      if (_lastExpanded != -1) {
+                                                        _isExpanded[
+                                                                _lastExpanded] =
+                                                            false;
                                                       }
-                                                      if (_dropDownEnabled) {
-                                                        toggleEnabled();
-                                                      }
-                                                    },
-                                                  );
-                                                }
-                                              : null,
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
+                                                      _isExpanded[index] = true;
+                                                      _lastExpanded = index;
+                                                    }
+                                                    if (_dropDownEnabled) {
+                                                      toggleEnabled();
+                                                    }
+                                                  },
+                                                );
+                                              }
+                                            : null,
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    _canReview
-                                                        ? Colors.blueAccent[700]
-                                                        : Colors.grey[600]),
                                           ),
-                                          child: Tooltip(
-                                            message: _canReview
-                                                ? ""
-                                                : 'Only Wizard user can give review',
-                                            child: Text(
-                                              "Review",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          )),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  _canReview
+                                                      ? Colors.blueAccent[700]
+                                                      : Colors.grey[600]),
+                                        ),
+                                        child: Tooltip(
+                                          message: _canReview
+                                              ? ""
+                                              : 'Only Wizard user can give review',
+                                          child: Text(
+                                            "Review",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   if (_isExpanded[index]!)
