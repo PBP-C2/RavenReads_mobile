@@ -138,7 +138,7 @@ class _ReplyThreadScreenState extends State<ReplyThreadScreen> {
       appBar: AppBar(
         title: Text('Threads'),
       ),
-      drawer: const LeftDrawer(),
+      // drawer: const LeftDrawer(),
       body: Column(
         children: [
           FutureBuilder<List<MuggleThread>>(
