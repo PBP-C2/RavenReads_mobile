@@ -9,7 +9,7 @@ List<Scroll> scrollFromJson(String str) => List<Scroll>.from(json.decode(str).ma
 String scrollToJson(List<Scroll> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Scroll {
-    String model;
+    Model model;
     int pk;
     Fields fields;
 
@@ -20,13 +20,13 @@ class Scroll {
     });
 
     factory Scroll.fromJson(Map<String, dynamic> json) => Scroll(
-        model: json["model"],
+        model: modelValues.map[json["model"]]!,
         pk: json["pk"],
         fields: Fields.fromJson(json["fields"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "model": model,
+        "model": modelValues.reverse[model],
         "pk": pk,
         "fields": fields.toJson(),
     };
@@ -58,4 +58,24 @@ class Fields {
         "image_url": imageUrl,
         "content": content,
     };
+}
+
+enum Model {
+    SPELL_BOOK_SCROLL
+}
+
+final modelValues = EnumValues({
+    "spell_book.scroll": Model.SPELL_BOOK_SCROLL
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+    late Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        reverseMap = map.map((k, v) => MapEntry(v, k));
+        return reverseMap;
+    }
 }

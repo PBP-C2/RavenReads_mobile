@@ -142,11 +142,11 @@ Widget build(BuildContext context) {
                           // Kirim ke Django dan tunggu respons
                           // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                           final response = await request.postJson(
-                          "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/",
+                          "http://localhost:8000/spell_book/create-flutter/",
                           jsonEncode(<String, String>{
-                              'name': _title,
-                              'price': _imageurl,
-                              'description': _content,
+                              'title': _title,
+                              'imageurl': _imageurl,
+                              'content': _content,
                               // TODO: Sesuaikan field data sesuai dengan aplikasimu
                           }));
                           if (response['status'] == 'success') {
@@ -156,7 +156,7 @@ Widget build(BuildContext context) {
                               ));
                               Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => MyHomePage(title: "RavenReads",)),
+                                  MaterialPageRoute(builder: (context) => ProductListPage()),
                               );
                           } else {
                               ScaffoldMessenger.of(context)
@@ -184,3 +184,4 @@ Widget build(BuildContext context) {
     );
   }
 }
+
