@@ -348,7 +348,9 @@ class CurvedAppBar extends StatelessWidget implements PreferredSizeWidget {
     return ClipPath(
       clipper: CurvedBottomClipper(),
       child: AppBar(
-        title: Text('Threads'),
+        backgroundColor: const Color.fromARGB(255, 12, 39, 61),
+        foregroundColor: Colors.white,
+        elevation: 0,
         // rest of your AppBar properties
       ),
     );

@@ -175,7 +175,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
                       final response = await http.post(
                         Uri.parse(
-                            'http://127.0.0.1:8000/auth/register/'),
+                            'https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/register/'),
                         body: {
                           'username': username,
                           'password': password,

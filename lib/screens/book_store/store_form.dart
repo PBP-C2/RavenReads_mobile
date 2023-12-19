@@ -20,7 +20,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
     Future<Map<String, dynamic>> addBookCheckout(int bookId) async {
       print(request.loggedIn);
       final response = await request.post(
-          'http://127.0.0.1:8000/add_book_flutter/', {'book_id': '$bookId'});
+          'https://ravenreads-c02-tk.pbp.cs.ui.ac.id/add_book_flutter/', {'book_id': '$bookId'});
 
       return response;
     }

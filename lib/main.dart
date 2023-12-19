@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ShopItem(
         "Whole Scroll", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
     ShopItem(
-        "Book Store", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+        "Book Store", Icons.book, const Color.fromARGB(255, 12, 39, 61)),
     ShopItem("Book Progress", Icons.menu_book_outlined,
         const Color.fromARGB(255, 12, 39, 61)),
     ShopItem("Logout", Icons.logout, const Color.fromARGB(255, 134, 31, 24)),
@@ -185,7 +185,7 @@ class ShopCard extends StatelessWidget {
                     builder: (context) => const BookProgressionPage()));
           } else if (item.name == "Logout") {
             final response = await request.logout(
-                "http://127.0.0.1:8000/auth/logout/");
+                "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/logout/");
             String message = response["message"];
             if (response['status']) {
               String uname = response["username"];

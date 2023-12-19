@@ -16,9 +16,9 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  List<Book> selectedBooks = [];
+  // List<Book> selectedBooks = [];
 
-  // @override
+  // @overrider
   // void initState() {
   //   super.initState();
   //   fetchBookDetails();
@@ -58,7 +58,7 @@ class _ProductPageState extends State<ProductPage> {
 
     Future<List<dynamic>> seeCheckout() async {
       final response =
-          await request.get('http://127.0.0.1:8000/get_book_details/');
+          await request.get('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_book_details/');
 
       return response['checkout_books'].map((book) => book).toList();
     }

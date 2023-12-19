@@ -45,7 +45,7 @@ class BookCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -58,7 +58,7 @@ class BookCard extends StatelessWidget {
                     book.fields.author,
                     style: TextStyle(
                       fontSize: 10,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -71,7 +71,7 @@ class BookCard extends StatelessWidget {
                     'ID: ${book.pk}',
                     style: TextStyle(
                       fontSize: 8,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -163,7 +163,7 @@ class _BookStorePageState extends State<BookStorePage> {
       appBar: AppBar(
           title: const Center(
             child: Text(
-              'BOOK STORE',
+              'Book Store',
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 12, 39, 61),
@@ -188,16 +188,24 @@ class _BookStorePageState extends State<BookStorePage> {
               ),
             Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-               onPressed: navigateToAddBook,
-              child: Text('Add Book'),
-            ),
-            ElevatedButton(
-              onPressed: navigateToCheckout,
-              child: Text('See Checkout'),
-            ),
-          ],
+         children: [
+  ElevatedButton(
+    onPressed: navigateToAddBook,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color.fromARGB(255, 12, 39, 61),  
+      foregroundColor: Colors.white, 
+    ),
+    child: Text('Add Book'),
+  ),
+  ElevatedButton(
+    onPressed: navigateToCheckout,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color.fromARGB(255, 12, 39, 61),  
+       foregroundColor: Colors.white,  
+    ),
+    child: Text('See Checkout'),
+  ),
+],
         ),
               FutureBuilder<List<Book>>(
                 future: _books,
