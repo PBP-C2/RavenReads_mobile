@@ -167,7 +167,7 @@ class _BookStorePageState extends State<BookStorePage> {
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 12, 39, 61),
-          foregroundColor: Colors.white,
+          foregroundColor: Colors.grey[300],
         ),
       drawer: const LeftDrawer(),
       body: SingleChildScrollView(
@@ -193,7 +193,7 @@ class _BookStorePageState extends State<BookStorePage> {
     onPressed: navigateToAddBook,
     style: ElevatedButton.styleFrom(
       backgroundColor: const Color.fromARGB(255, 12, 39, 61),  
-      foregroundColor: Colors.white, 
+      foregroundColor: Colors.grey[300], 
     ),
     child: Text('Add Book'),
   ),
@@ -201,7 +201,7 @@ class _BookStorePageState extends State<BookStorePage> {
     onPressed: navigateToCheckout,
     style: ElevatedButton.styleFrom(
       backgroundColor: const Color.fromARGB(255, 12, 39, 61),  
-       foregroundColor: Colors.white,  
+       foregroundColor: Colors.grey[300],  
     ),
     child: Text('See Checkout'),
   ),
