@@ -17,7 +17,7 @@ class BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   return Card(
-    color: Colors.blueAccent,
+    color: const Color.fromARGB(255, 12, 39, 61),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -166,7 +166,7 @@ class _BookStorePageState extends State<BookStorePage> {
               'BOOK STORE',
             ),
           ),
-          backgroundColor: Colors.indigo,
+          backgroundColor: const Color.fromARGB(255, 12, 39, 61),
           foregroundColor: Colors.white,
         ),
       drawer: const LeftDrawer(),

@@ -18,39 +18,39 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   List<Book> selectedBooks = [];
 
-  @override
-  void initState() {
-    super.initState();
-    fetchBookDetails();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchBookDetails();
+  // }
 
-  Future<void> fetchBookDetails() async {
-    for (int i = 0; i < widget.bookIds.length; i++) {
-      final bookId = widget.bookIds[i];
-      try {
-        final bookDetails = await fetchBookDetailsById(bookId);
-        setState(() {
-          selectedBooks.add(bookDetails!);
-        });
-      } catch (e) {
-        print("Error fetching book details: $e");
-      }
-    }
-  }
+  // Future<void> fetchBookDetails() async {
+  //   for (int i = 0; i < widget.bookIds.length; i++) {
+  //     final bookId = widget.bookIds[i];
+  //     try {
+  //       final bookDetails = await fetchBookDetailsById(bookId);
+  //       setState(() {
+  //         selectedBooks.add(bookDetails!);
+  //       });
+  //     } catch (e) {
+  //       print("Error fetching book details: $e");
+  //     }
+  //   }
+  // }
 
-  Future<Book?> fetchBookDetailsById(int bookId) async {
-    final url = Uri.parse('http://127.0.0.1:8000/get_book_details/$bookId/');
-    final response = await http.get(url);
+  // Future<Book?> fetchBookDetailsById(int bookId) async {
+  //   final url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_book_details/$bookId/');
+  //   final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data =
-          jsonDecode(utf8.decode(response.bodyBytes));
-      final Book bookDetails = Book.fromJson(data);
-      return bookDetails;
-    } else {
-      throw Exception('Failed to load book details');
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> data =
+  //         jsonDecode(utf8.decode(response.bodyBytes));
+  //     final Book bookDetails = Book.fromJson(data);
+  //     return bookDetails;
+  //   } else {
+  //     throw Exception('Failed to load book details');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _ProductPageState extends State<ProductPage> {
         'Book Store Checkout',
       ),
     ),
-    backgroundColor: Colors.indigo,
+    backgroundColor: const Color.fromARGB(255, 12, 39, 61),
     foregroundColor: Colors.white,
   ),
   body: FutureBuilder(
@@ -90,7 +90,7 @@ class _ProductPageState extends State<ProductPage> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start, // Set rata kiri
+                  crossAxisAlignment: CrossAxisAlignment.start, 
                   children: [
                     Text(
                       book['title'],

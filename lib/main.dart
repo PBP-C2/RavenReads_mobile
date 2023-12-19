@@ -185,7 +185,7 @@ class ShopCard extends StatelessWidget {
                     builder: (context) => const BookProgressionPage()));
           } else if (item.name == "Logout") {
             final response = await request.logout(
-                "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/auth/logout/");
+                "http://127.0.0.1:8000/auth/logout/");
             String message = response["message"];
             if (response['status']) {
               String uname = response["username"];
