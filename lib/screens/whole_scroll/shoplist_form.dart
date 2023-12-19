@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:raven_reads_mobile/main.dart';
 
 import 'package:raven_reads_mobile/screens/whole_scroll/product_list.dart';
 import 'package:raven_reads_mobile/widgets/left_drawer.dart';
+
 
 
 // TODO: Impor drawer yang sudah dibuat sebelumnya
@@ -12,6 +18,7 @@ class ShopFormPage extends StatefulWidget {
     State<ShopFormPage> createState() => _ShopFormPageState();
 }
 
+
 class _ShopFormPageState extends State<ShopFormPage> {
   final _formKey = GlobalKey<FormState>();  
   String _title = "";
@@ -19,7 +26,10 @@ class _ShopFormPageState extends State<ShopFormPage> {
   String _content = "";
 
   @override
-  Widget build(BuildContext context) {
+  @override
+Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -127,48 +137,35 @@ class _ShopFormPageState extends State<ShopFormPage> {
                       style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 13, 21, 65)),
                       ),
-                    onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Simpan data produk ke dalam list
-                      Product newProduct = Product(_title, _imageurl , _content);
-                      ProductListPage.products.add(newProduct);
-
-                      // Navigate to the ProductListPage
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProductListPage()),
-                      );
-
-                      // Tampilkan daftar produk yang sudah disimpan di dalam AlertDialog
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(_title),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(_title),
-                                  Text(_content),
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-
-                      // Reset formulir setelah menyimpan
-                      _formKey.currentState!.reset();
-                    }
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                          // Kirim ke Django dan tunggu respons
+                          // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                          final response = await request.postJson(
+                          "http://localhost:8000/spell_book/create-flutter/",
+                          jsonEncode(<String, String>{
+                              'title': _title,
+                              'imageurl': _imageurl,
+                              'content': _content,
+                              // TODO: Sesuaikan field data sesuai dengan aplikasimu
+                          }));
+                          if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                              content: Text("Produk baru berhasil disimpan!"),
+                              ));
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ProductListPage()),
+                              );
+                          } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  content:
+                                      Text("Terdapat kesalahan, silakan coba lagi."),
+                              ));
+                          }
+                      }
                   },
                     child: const Text(
                       "Save",
@@ -187,3 +184,4 @@ class _ShopFormPageState extends State<ShopFormPage> {
     );
   }
 }
+
