@@ -37,7 +37,7 @@ Widget build(BuildContext context) {
             'SpellBook',
           ),
         ),
-        backgroundColor:  Colors.indigo[900],
+        backgroundColor: Color(0xff4F74DD),
         foregroundColor: Colors.white,
       ),
       body: Stack(
@@ -135,7 +135,7 @@ Widget build(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 13, 21, 65)),
+                      backgroundColor: MaterialStateProperty.all( Color(0xff4F74DD),),
                       ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {

@@ -45,6 +45,7 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+  
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -58,45 +59,55 @@ class _MyHomePageState extends State<MyHomePage> {
   // always marked "final".;
 
   final List<ShopItem> items = [
-    ShopItem("Discussion Forum", Icons.checklist,
-        const Color.fromARGB(255, 12, 39, 61)),
-    ShopItem("Magic Quiz", Icons.add_shopping_cart,
-        const Color.fromARGB(255, 12, 39, 61)),
+    ShopItem("Discussion Forum", Icons.forum,
+        const Color(0xff4F74DD),),
+    ShopItem("Magic Quiz", Icons.quiz,
+        const Color(0xff4F74DD),),
     ShopItem(
-        "Spell Book", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+        "Spell Book", Icons.book_rounded, const Color(0xff4F74DD)),
     ShopItem(
-        "Whole Scroll", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+        "Whole Scroll", Icons.bookmark, const Color(0xff4F74DD)),
     ShopItem(
-        "Book Store", Icons.book, const Color.fromARGB(255, 12, 39, 61)),
+        "Book Store", Icons.add_shopping_cart, const Color(0xff4F74DD)),
     ShopItem("Book Progress", Icons.menu_book_outlined,
-        const Color.fromARGB(255, 12, 39, 61)),
-    ShopItem("Logout", Icons.logout, const Color.fromARGB(255, 134, 31, 24)),
+        const Color(0xff4F74DD),),
+    ShopItem("Logout", Icons.logout, Color.fromARGB(255, 215, 23, 23)),
   ];
 
   @override
   Widget build(BuildContext context) {
+    const EdgeInsetsGeometry imagePadding = EdgeInsets.only(top: 20.0);
     return Scaffold(
       // appBar: CurvedAppBar(),
       // drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         child: Container(
-          color: const Color.fromARGB(255, 12, 39, 61), // Dark background color
+          color: const Color(0xff4F74DD), // Dark background color
           child: Column(
             children: <Widget>[
+              // Add the image here
+              Padding(
+                padding: imagePadding,
+                child: Image.asset(
+                  'assets/logo.png', // Replace with the path to your image
+                  width: 150.0,
+                  height: 150.0,
+                  fit: BoxFit.cover, // Adjust the BoxFit property as needed
+                ),
+              ),
               Container(
-                color:
-                    const Color.fromARGB(255, 12, 39, 61), // Top section color
+                color: const Color(0xff4F74DD), // Top section color
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                    vertical: 60.0), // Increased vertical padding
+                height: 100.0,
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: const Text(
-                  'Welcome to RavenReads',
+                  'RavenReads',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
                     fontFamily: 'Poppins',
+                    fontSize: 25.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -108,8 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     topRight: Radius.circular(50),
                   ),
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 60, 20,
-                    20), // Padding adjusted for curved top and spacing
+                padding: const EdgeInsets.fromLTRB(20, 60, 20,0), // Padding adjusted for curved top and spacing
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // Number of columns
@@ -216,6 +226,8 @@ class ShopCard extends StatelessWidget {
                 item.name,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
+                  fontFamily: 'Poppins', // Use the Poppins font family
+                  fontWeight: FontWeight.w800,
                   color: Colors.white,
                   fontSize: 18, // Font size
                 ),

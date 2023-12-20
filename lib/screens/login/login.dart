@@ -52,15 +52,15 @@ Widget build(BuildContext context) {
             color: const Color.fromARGB(255, 79, 116, 221),// Top section color
               width: double.infinity,// Increased vertical padding
                padding: const EdgeInsets.symmetric(
-                      vertical: 30.0), 
+                      vertical: 100.0), 
               child: const Text(
                 'Welcome to RavenReads!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontFamily: 'Poppins',
+                   fontFamily: 'Poppins',
+                    fontSize: 25.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
                 ),
               ),
           ),
@@ -93,7 +93,7 @@ Widget build(BuildContext context) {
             decoration: InputDecoration(
               labelText: 'Username',
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(30),
               ),
             ),
           ),
@@ -103,7 +103,7 @@ Widget build(BuildContext context) {
             decoration: InputDecoration(
               labelText: 'Password',
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(30),
               ),
             ),
             obscureText: true,
@@ -159,8 +159,8 @@ Widget build(BuildContext context) {
             },
             child: const Text('Sign In'),
             style: ElevatedButton.styleFrom(
-              primary: const Color.fromARGB(255, 79, 116, 221), // Adjust the color to match the design
-              minimumSize: Size(double.infinity, 36), // Set the size of the button
+              primary: Color.fromARGB(255, 255, 255, 255), // Adjust the color to match the design
+              minimumSize: Size(200, 60), // Set the size of the button
             ),
           ),
           const SizedBox(height: 20),
