@@ -16,74 +16,86 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Card(
-    color: const Color.fromARGB(255, 12, 39, 61),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          flex: 5,
-          child: Container(
-            constraints: BoxConstraints(maxHeight: 300),
-            child: Image.network(
-              book.fields.imageUrlL!,
-              fit: BoxFit.cover,
+    return Card(
+      color: const Color.fromARGB(255, 12, 39, 61),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 5,
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 300),
+              child: Image.network(
+                book.fields.imageUrlL!,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Container(
+                    color: Colors.black,
+                     child: Center(
+                      child: Text("Image not available"),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 4),
-        Expanded(
-          flex: 5,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FittedBox(
-                child: Padding(
+          SizedBox(height: 4),
+          Expanded(
+            flex: 5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
                   padding: const EdgeInsets.all(0.0),
-                  child: Text(
-                    book.fields.title,
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        book.fields.title,
+                        style: TextStyle(
+                          fontSize: book.fields.title.length > 30 ? 9 : 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Text(
-                    book.fields.author,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.white,
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Text(
+                      book.fields.author,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Text(
-                    'ID: ${book.pk}',
-                    style: TextStyle(
-                      fontSize: 8,
-                      color: Colors.white,
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Text(
+                      'ID: ${book.pk}',
+                      style: TextStyle(
+                        fontSize: 8,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }
 
 class BookStorePage extends StatefulWidget {
@@ -94,43 +106,43 @@ class BookStorePage extends StatefulWidget {
 }
 
 class _BookStorePageState extends State<BookStorePage> {
-
   late Future<List<Book>> _books;
 
   Future<List<Book>> fetchProduct() async {
     try {
-    var url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/api/books/');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
+      var url =
+          Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/api/books/');
+      var response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
-      List<Book> listProduct = [];
-      for (var d in data) {
-        if (d != null && d['pk'] <= 150) {
-          listProduct.add(Book.fromJson(d));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+        List<Book> listProduct = [];
+        for (var d in data) {
+          if (d != null && d['pk'] <= 150) {
+            listProduct.add(Book.fromJson(d));
+          }
         }
+        return listProduct;
+      } else {
+        print("HTTP Error: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+        throw Exception("Failed to load data");
       }
-      return listProduct;
-    } else {
-      print("HTTP Error: ${response.statusCode}");
-      print("Response Body: ${response.body}");
+    } catch (e) {
+      print("Error in fetchProduct: $e");
       throw Exception("Failed to load data");
     }
-  } catch (e) {
-    print("Error in fetchProduct: $e");
-    throw Exception("Failed to load data");
-  }
   }
 
-   List<Book> selectedBooks = [];
+  List<Book> selectedBooks = [];
 
   @override
   void initState() {
     super.initState();
-    _books = fetchProduct(); 
+    _books = fetchProduct();
   }
 
   void navigateToAddBook() {
@@ -141,10 +153,34 @@ class _BookStorePageState extends State<BookStorePage> {
   }
 
   void navigateToCheckout() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ProductPage(bookIds: selectedBooks.map((book) => book.pk).toList())),
-    );
+    try {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductPage(
+                bookIds: selectedBooks.map((book) => book.pk).toList())),
+      );
+    } catch (e) {
+      print("Error navigating to checkout: $e");
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('There was an error'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   void toggleBookSelection(Book book) {
@@ -161,14 +197,14 @@ class _BookStorePageState extends State<BookStorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Center(
-            child: Text(
-              'Book Store',
-            ),
+        title: const Center(
+          child: Text(
+            'Book Store',
           ),
-          backgroundColor: const Color.fromARGB(255, 12, 39, 61),
-          foregroundColor: Colors.grey[300],
         ),
+        backgroundColor: const Color.fromARGB(255, 12, 39, 61),
+        foregroundColor: Colors.grey[300],
+      ),
       drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -186,27 +222,27 @@ class _BookStorePageState extends State<BookStorePage> {
                   ),
                 ),
               ),
-            Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-         children: [
-  ElevatedButton(
-    onPressed: navigateToAddBook,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color.fromARGB(255, 12, 39, 61),  
-      foregroundColor: Colors.grey[300], 
-    ),
-    child: Text('Add Book'),
-  ),
-  ElevatedButton(
-    onPressed: navigateToCheckout,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color.fromARGB(255, 12, 39, 61),  
-       foregroundColor: Colors.grey[300],  
-    ),
-    child: Text('See Checkout'),
-  ),
-],
-        ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: navigateToAddBook,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 12, 39, 61),
+                      foregroundColor: Colors.grey[300],
+                    ),
+                    child: Text('Add Book'),
+                  ),
+                  ElevatedButton(
+                    onPressed: navigateToCheckout,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 12, 39, 61),
+                      foregroundColor: Colors.grey[300],
+                    ),
+                    child: Text('See Checkout'),
+                  ),
+                ],
+              ),
               FutureBuilder<List<Book>>(
                 future: _books,
                 builder: (context, snapshot) {
