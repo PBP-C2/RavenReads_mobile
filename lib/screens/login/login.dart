@@ -6,6 +6,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:raven_reads_mobile/models/UserProvider.dart';
 
+
 void main() {
   runApp(const LoginApp());
 }
@@ -36,41 +37,81 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
-    final userProvider = Provider.of<UserProvider>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Login'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Username',
+ @override
+Widget build(BuildContext context) {
+  final request = context.watch<CookieRequest>();
+  final userProvider = Provider.of<UserProvider>(context);
+  return Scaffold(
+    body: Container(
+      color: Color.fromRGBO(12, 39, 61, 1), // Use SingleChildScrollView to avoid overflow when keyboard appears
+      // padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            color:const Color.fromARGB(255, 12, 39, 61), // Top section color
+              width: double.infinity,// Increased vertical padding
+               padding: const EdgeInsets.symmetric(
+                      vertical: 30.0), 
+              child: const Text(
+                'Welcome to RavenReads!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+          ),
+          Flexible(child: 
+          Container(
+            decoration: BoxDecoration(
+                        color: Colors.white, // Bottom section color
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                      ),
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                 // Adjust the size as needed
+          SizedBox( 
+          height: 0,
+          child : Stack(
+            alignment: Alignment.center,
+            children: [
+              // Your logo widget here (e.g., an Image or Container)
+              
+            ],
+          ),
+          ),
+          const SizedBox(height: 50), // Adjust the size as needed
+          TextField(
+            controller: _usernameController,
+            decoration: InputDecoration(
+              labelText: 'Username',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-            const SizedBox(height: 12.0),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Password',
+          ),
+          const SizedBox(height: 12.0),
+          TextField(
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              obscureText: true,
             ),
-            const SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: () async {
-                String username = _usernameController.text;
+            obscureText: true,
+          ),
+          const SizedBox(height: 24.0),
+          ElevatedButton(
+            onPressed: () async {
+              String username = _usernameController.text;
                 String password = _passwordController.text;
 
                 // Cek kredensial
@@ -115,29 +156,41 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 }
-              },
-              child: const Text('Login'),
+            },
+            child: const Text('Sign In'),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blue.shade800, // Adjust the color to match the design
+              minimumSize: Size(double.infinity, 36), // Set the size of the button
             ),
-            SizedBox(height: 20),
-            Text(
-              'Don`t have an account yet?',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to registration page
+          ),
+          const SizedBox(height: 20),
+          GestureDetector(
+            onTap: () {
+               // Navigate to registration page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const RegistrationPage()),
                 );
-              },
-              child: const Text('Register'),
+            },
+            child: Text(
+              'Register here!',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade800, // Adjust the color to match the design
+                decoration: TextDecoration.underline,
+              ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
+              ]
+            ),
+          ),
+          ),
+        ],
+    ),
+    )
+  );
+}
+
 }
