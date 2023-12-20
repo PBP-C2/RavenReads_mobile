@@ -142,7 +142,7 @@ Widget build(BuildContext context) {
                           // Kirim ke Django dan tunggu respons
                           // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                           final response = await request.postJson(
-                          "http://localhost:8000/spell_book/create-flutter/",
+                          "https://ravenreads-c02-tk.pbp.cs.ui.ac.id/spell_book/create-flutter/",
                           jsonEncode(<String, String>{
                               'title': _title,
                               'imageurl': _imageurl,
