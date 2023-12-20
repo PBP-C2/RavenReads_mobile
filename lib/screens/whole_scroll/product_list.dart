@@ -77,7 +77,7 @@ class _ProductPageState extends State<ProductListPage> {
                             style: TextStyle(
                               fontSize: 48,
                               color: Color(0xfffffffffff),
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
