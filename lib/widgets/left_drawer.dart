@@ -17,12 +17,12 @@ class LeftDrawer extends StatelessWidget {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 12, 39, 61),
+              color: const Color.fromARGB(255, 79, 116, 221),
             ),
             child: Column(
               children: [
                 Text(
-                  'Shopping List',
+                  'RavenReads',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -32,7 +32,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(10)),
                 Text(
-                    "Uhhhhhhhhh isinya nanti aja ini mau diisi apaan saya juga gak tau",
+                    "",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white)),
               ],

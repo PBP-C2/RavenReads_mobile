@@ -641,8 +641,12 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                                   height: 10,
                                                 ),
                                                 Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
+                                                      padding: EdgeInsets.only(
+                                                          top: 10),
                                                       width: 75,
                                                       child: Text(
                                                         "Review:",
