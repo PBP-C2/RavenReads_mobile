@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ShopItem(
         "Whole Scroll", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
     ShopItem(
-        "Book Store", Icons.checklist, const Color.fromARGB(255, 12, 39, 61)),
+        "Book Store", Icons.book, const Color.fromARGB(255, 12, 39, 61)),
     ShopItem("Book Progress", Icons.menu_book_outlined,
         const Color.fromARGB(255, 12, 39, 61)),
     ShopItem("Logout", Icons.logout, const Color.fromARGB(255, 134, 31, 24)),

@@ -50,7 +50,7 @@ class _BookRecommendationState extends State<BookRecommendation> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Book Recommendations'),
-        backgroundColor: Colors.indigo,
+        backgroundColor: const Color.fromARGB(255, 12, 39, 61),
         foregroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),

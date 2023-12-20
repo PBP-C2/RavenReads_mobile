@@ -176,7 +176,7 @@ class _MainDiscussionState extends State<MainDiscussion> {
       child: Card(
         child: ListTile(
           leading: CircleAvatar(
-            backgroundImage: NetworkImage("https://api.ambr.top/assets/UI/UI_AvatarIcon_Furina.png?vh=2023100601"), // Replace with actual URL
+            backgroundImage: NetworkImage("https://t4.ftcdn.net/jpg/03/29/19/15/360_F_329191596_tRQiV7LZjTZtuPM09QyOS09HV1D9VimE.jpg"), // Replace with actual URL
             radius: 20,
           ),
           title: Text(thread.fields.title),
@@ -213,7 +213,7 @@ class _MainDiscussionState extends State<MainDiscussion> {
       child: Card(
         child: ListTile(
           leading: CircleAvatar(
-            backgroundImage: NetworkImage("https://api.ambr.top/assets/UI/UI_AvatarIcon_Neuvillette.png?vh=2023100601"), // Replace with actual URL
+            backgroundImage: NetworkImage("https://images.unsplash.com/photo-1589859762194-eaae75c61f64?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ymx1ZSUyMGNvbG9yfGVufDB8fDB8fHww"), // Replace with actual URL
             radius: 20,
           ),
           title: Text(thread.fields.title),
@@ -250,11 +250,11 @@ class _MainDiscussionState extends State<MainDiscussion> {
         appBar: CurvedAppBar(),
         drawer: const LeftDrawer(),
         body: Container (
-            color: const Color.fromARGB(255, 12, 39, 61), // Dark background color
+            color: const Color.fromARGB(255, 79, 116, 221), // Dark background color
             child: Column (
               children: <Widget>[
                 Container(
-                  color:const Color.fromARGB(255, 12, 39, 61), // Top section color
+                  color: const Color.fromARGB(255, 79, 116, 221), // Top section color
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
                       vertical: 60.0), // Increased vertical padding
@@ -348,7 +348,9 @@ class CurvedAppBar extends StatelessWidget implements PreferredSizeWidget {
     return ClipPath(
       clipper: CurvedBottomClipper(),
       child: AppBar(
-        title: Text('Threads'),
+        backgroundColor: const Color.fromARGB(255, 79, 116, 221),
+        foregroundColor: Colors.white,
+        // elevation: 0,
         // rest of your AppBar properties
       ),
     );

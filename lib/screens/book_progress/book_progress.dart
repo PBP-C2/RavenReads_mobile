@@ -68,8 +68,10 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
     List<ReadingProgress> data = await fetchProgress();
     setState(
       () {
-        _reviewformKeys =
-            List.generate(data.length, (index) => GlobalKey<FormState>());
+        _reviewformKeys = List.generate(
+          data.length,
+          (index) => GlobalKey<FormState>(),
+        );
       },
     );
   }
@@ -111,9 +113,16 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                     height: 60,
                     child: TextField(
                       onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value.toLowerCase();
-                        });
+                        setState(
+                          () {
+                            _searchQuery = value.toLowerCase();
+                            if (_lastExpanded != -1) {
+                              _isExpanded[_lastExpanded] =
+                                  !_isExpanded[_lastExpanded]!;
+                              _lastExpanded = -1;
+                            }
+                          },
+                        );
                       },
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
@@ -230,7 +239,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                         ),
                                       );
                                       _reviewformKeys
-                                          .add(new GlobalKey<FormState>());
+                                          .add(GlobalKey<FormState>());
                                       setState(() {});
                                     } else if (response["status"] == "error") {
                                       ScaffoldMessenger.of(context)
@@ -280,7 +289,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                         Text(
                           "There is no progress data",
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 29, 40, 84),
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                         ),
@@ -307,7 +316,7 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                           Text(
                             "No matching book",
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Color.fromARGB(255, 29, 40, 84),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -632,8 +641,12 @@ class _BookProgressionPageState extends State<BookProgressionPage> {
                                                   height: 10,
                                                 ),
                                                 Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
+                                                      padding: EdgeInsets.only(
+                                                          top: 10),
                                                       width: 75,
                                                       child: Text(
                                                         "Review:",
