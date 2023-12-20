@@ -18,7 +18,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
     final request = context.read<CookieRequest>();
 
     Future<Map<String, dynamic>> addBookCheckout(int bookId) async {
-      print(request.loggedIn);
+      // print(request.loggedIn);
       final response = await request.post(
           'https://ravenreads-c02-tk.pbp.cs.ui.ac.id/add_book_flutter/', {'book_id': '$bookId'});
 

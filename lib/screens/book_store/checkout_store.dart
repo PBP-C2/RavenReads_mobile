@@ -16,42 +16,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  // List<Book> selectedBooks = [];
-
-  // @overrider
-  // void initState() {
-  //   super.initState();
-  //   fetchBookDetails();
-  // }
-
-  // Future<void> fetchBookDetails() async {
-  //   for (int i = 0; i < widget.bookIds.length; i++) {
-  //     final bookId = widget.bookIds[i];
-  //     try {
-  //       final bookDetails = await fetchBookDetailsById(bookId);
-  //       setState(() {
-  //         selectedBooks.add(bookDetails!);
-  //       });
-  //     } catch (e) {
-  //       print("Error fetching book details: $e");
-  //     }
-  //   }
-  // }
-
-  // Future<Book?> fetchBookDetailsById(int bookId) async {
-  //   final url = Uri.parse('https://ravenreads-c02-tk.pbp.cs.ui.ac.id/get_book_details/$bookId/');
-  //   final response = await http.get(url);
-
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> data =
-  //         jsonDecode(utf8.decode(response.bodyBytes));
-  //     final Book bookDetails = Book.fromJson(data);
-  //     return bookDetails;
-  //   } else {
-  //     throw Exception('Failed to load book details');
-  //   }
-  // }
-
+  
   @override
   Widget build(BuildContext context) {
     final request = context.read<CookieRequest>();
@@ -100,9 +65,29 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text("Author: ${book['author']}"),
+                    Text(
+                      "ID: ${book['id']}",
+                      style: TextStyle(
+                        fontSize: 12, 
+                        color: Colors.black, 
+                      ),
+                    ),
                     const SizedBox(height: 10),
-                    Text("Publisher: ${book['publisher']}"),
+                    Text(
+                      "Author: ${book['author']}",
+                      style: TextStyle(
+                        fontSize: 15, 
+                        color: const Color.fromARGB(255, 12, 39, 61),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Publisher: ${book['publisher']}",
+                      style: TextStyle(
+                        fontSize: 14, 
+                        color: const Color.fromARGB(255, 12, 39, 61), 
+                      ),
+                    ),
                     const SizedBox(height: 10),
                   ],
                 ),
