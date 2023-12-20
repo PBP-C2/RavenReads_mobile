@@ -43,13 +43,13 @@ Widget build(BuildContext context) {
   final userProvider = Provider.of<UserProvider>(context);
   return Scaffold(
     body: Container(
-      color: Color.fromRGBO(12, 39, 61, 1), // Use SingleChildScrollView to avoid overflow when keyboard appears
+      color: const Color.fromARGB(255, 79, 116, 221), // Use SingleChildScrollView to avoid overflow when keyboard appears
       // padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            color:const Color.fromARGB(255, 12, 39, 61), // Top section color
+            color: const Color.fromARGB(255, 79, 116, 221),// Top section color
               width: double.infinity,// Increased vertical padding
                padding: const EdgeInsets.symmetric(
                       vertical: 30.0), 
@@ -159,7 +159,7 @@ Widget build(BuildContext context) {
             },
             child: const Text('Sign In'),
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue.shade800, // Adjust the color to match the design
+              primary: const Color.fromARGB(255, 79, 116, 221), // Adjust the color to match the design
               minimumSize: Size(double.infinity, 36), // Set the size of the button
             ),
           ),
@@ -178,7 +178,7 @@ Widget build(BuildContext context) {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue.shade800, // Adjust the color to match the design
+                color: const Color.fromARGB(255, 79, 116, 221), // Adjust the color to match the design
                 decoration: TextDecoration.underline,
               ),
             ),
